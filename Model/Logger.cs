@@ -13,7 +13,7 @@ namespace Model
         private string LogPath;
         private bool LogInitiated = false;
         private string StatePath;
-        private Dictionary<string, Savestate> SaveStates;
+        private Dictionary<string, Savestate> SavedStates;
         public Logger(string LogPath, string StatePath)
         {
             int Counter = 0;
@@ -24,7 +24,7 @@ namespace Model
             } while (System.IO.File.Exists(this.LogPath));
             System.IO.File.WriteAllText(this.LogPath, "[");
             this.StatePath = StatePath + @"\\state.json";
-            SaveStates = new Dictionary<string, Savestate>();
+            SavedStates = new Dictionary<string, Savestate>();
         }
         public void Log(string Name, string SourceFilePath, string TargetFilePath, Workstate State, double TotalFiles, double TotalSize, double FileSize, double CurrentFile, float TransferTime)
         {
@@ -42,15 +42,15 @@ namespace Model
         }
         private void UpdateState(string Name, double TotalFiles, double TotalSize, string SourceFilePath, string TargetFilePath, Workstate State, double CurrentFile)
         {
-            if (!SaveStates.ContainsKey(Name))
+            if (!SavedStates.ContainsKey(Name))
             {
-                SaveStates.Add(Name, new Savestate(Name, TotalFiles, TotalSize));
+                SavedStates.Add(Name, new Savestate(Name, TotalFiles, TotalSize));
             }
-            SaveStates[Name].AssignValues(SourceFilePath, TargetFilePath, State, CurrentFile);
+            SavedStates[Name].AssignValues(SourceFilePath, TargetFilePath, State, CurrentFile);
             string StateContent = "[";
-            foreach (var SaveState in SaveStates)
+            foreach (var SavedState in SavedStates)
             {
-                StateContent += $"\n{{\n{SaveState.Value}}},";
+                StateContent += $"\n{{\n{SavedState.Value}}},";
             }
             StateContent = StateContent.Remove(StateContent.Length - 1, 1) + "\n]";
             System.IO.File.WriteAllText(StatePath, StateContent);
