@@ -6,13 +6,30 @@ using System.Threading.Tasks;
 
 namespace Model
 {
+    internal class Job
+    {
+        public string Name { get; set; }
+        public string SourcePath { get; set; }
+        public string TargetPath { get; set; }
+        public Savetype SaveType { get; set; }
+        public override string ToString()
+        {
+            return $"Name: {Name}\nSource: {SourcePath}\nTarget: {TargetPath}\nType: {SaveType}";
+        }
+    }
     public static class Constants
     {
-        public static readonly string DateFormat = "dd-MM-yyyy";
-        public static readonly string DateTimeFormat = "dd-MM-yyyy HH:mm:ss";
+        //Constants used in various places within the program
+        public static readonly string DateFormat = @"dd-MM-yyyy";
+        public static readonly string DateTimeFormat = @"dd-MM-yyyy HH:mm:ss";
+        public static readonly string JobsFile = @"jobs.json";
+        public static readonly string LogPath = @"logs\\files\\";
+        public static readonly string StatePath = @"logs\\state\\";
+        public static readonly string SingleToDoubleBackslashRegex = @"(?<!\\)\\{1}(?!\\)|\\{3,}";
     }
     public struct Existingsave
     {
+        //Characteristics of a save that has already been done within a job
         public string Path;
         public int SaveNumber;
         public Existingsave(string Path, int SaveNumber)
@@ -23,6 +40,7 @@ namespace Model
     }
     public class Savestate
     {
+        //Last state of a job that is being/has been executed
         public string? Name;
         public string? SourceFilePath;
         public string? TargetFilePath;
