@@ -12,29 +12,25 @@ namespace Model
 {
     internal class File
     {
-        private string Name;
-        private string SourcePath;
-        private string TargetPath;
-        private Savetype SaveType;
+        private string SaveSubfolder;
+        private Job Job;
         private string RelativeFilePath;
         private List<Existingsave>? ExistingSaves;
-        public File(ref string Name, ref string SourcePath, ref string TargetPath, ref Savetype SaveType, string RelativeFilePath, [Optional] ref List<Existingsave> ExistingSaves)
+        public File(ref string SaveSubfolder, ref Job Job, string RelativeFilePath, [Optional] ref List<Existingsave> ExistingSaves)
         {
-            this.Name = Name;
-            this.SaveType = SaveType;
-            this.SourcePath = SourcePath;
-            this.TargetPath = TargetPath;
+            this.SaveSubfolder = SaveSubfolder;
+            this.Job = Job;
             this.RelativeFilePath = RelativeFilePath;
             if (ExistingSaves != null && ExistingSaves.Count > 0)
             {
                 this.ExistingSaves = ExistingSaves;
             }
         }
-        public double Save()
+        public double? Save()
         //This method will save the file if it is necessary (differential save) or if the savetype is complete
-        //If a file was created, it returns its size, if not, it returns -1
+        //If a file was created, it returns its size, if it deliberatly wasn't, it returns null, if an error occured creating it, it returns -1
         {
-            if (SaveType == Savetype.Differential)
+            if (this.Job.SaveType == Savetype.Differential)
             {
                 //If the savetype is differential, the newest saved version of the file will be searched for
                 string? NewestVersion = CheckForExistingNewest();
@@ -45,7 +41,7 @@ namespace Model
                 }
                 else
                 {
-                    return -1;
+                    return null;
                 }
             }
             else
@@ -55,16 +51,23 @@ namespace Model
         }
         private long Copy()
         //This method copies a file from source to target (save folder). If the path for it doesn't exist, it will create it.
-        //The new file's size will be returned
+        //The new file's size will be returned. -1 Will be returned if an error occured
         {
-            string TargetFilePath = TargetPath + @"\\" + Name + @"\\" + RelativeFilePath;
-            if (!Directory.Exists(Path.GetDirectoryName(TargetFilePath)))
+            try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(TargetFilePath));
+                string TargetFilePath = this.Job.TargetPath + @"\\" + this.SaveSubfolder + @"\\" + RelativeFilePath;
+                if (!Directory.Exists(Path.GetDirectoryName(TargetFilePath)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(TargetFilePath));
+                }
+                System.IO.File.Copy(this.Job.SourcePath + @"\\" + RelativeFilePath, TargetFilePath, true);
+                long Size = new FileInfo(TargetFilePath).Length;
+                return Size;
             }
-            System.IO.File.Copy(SourcePath + @"\\" + RelativeFilePath, TargetFilePath, true);
-            long Size = new FileInfo(TargetFilePath).Length;
-            return Size;
+            catch
+            {
+                return -1;
+            }
         }
         private string? CheckForExistingNewest()
         //This method is used for differential saves, it searches for the existence of a file from the newest to the oldest revision of the save.
@@ -86,7 +89,7 @@ namespace Model
         //This method is used for differential saves, it compares the object's file to a file whose path is given in parameter
         //If the files are different, true is returned, false if they're not
         {
-            FileStream ObjectFile = new(SourcePath + @"\\" + RelativeFilePath, FileMode.Open);
+            FileStream ObjectFile = new(this.Job.SourcePath + @"\\" + RelativeFilePath, FileMode.Open);
             FileStream ComparedFile = new(ComparedFilePath, FileMode.Open);
             //First, file lengths are compared because it's the least time costly comparison method
             if (ObjectFile.Length != ComparedFile.Length)

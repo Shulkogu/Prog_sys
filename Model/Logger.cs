@@ -13,8 +13,9 @@ namespace Model
         private string LogPath;
         private bool LogInitiated = false;
         private string StatePath;
-        private Dictionary<string, Savestate> SavedStates;
+        private Dictionary<string, Savestate> SaveStates;
         public Logger(string LogPath, string StatePath)
+        //Method that initializes the logger and create the JSON file that will be used to log the copied files
         {
             int Counter = 0;
             do
@@ -24,12 +25,13 @@ namespace Model
             } while (System.IO.File.Exists(this.LogPath));
             System.IO.File.WriteAllText(this.LogPath, "[");
             this.StatePath = StatePath + @"\\state.json";
-            SavedStates = new Dictionary<string, Savestate>();
+            SaveStates = new Dictionary<string, Savestate>();
         }
         public void Log(string Name, string SourceFilePath, string TargetFilePath, Workstate State, double TotalFiles, double TotalSize, double FileSize, double CurrentFile, float TransferTime)
+        //Method that adds logs the copy of a file. It also calls the method that updates states
         {
-            string Log = (LogInitiated ? "," : "") + $"\n{{" +
-                $"\n\"Name\": \"{Name}\",\n" +
+            string Log = (LogInitiated ? "," : "") + $"\n{{\n" +
+                $"\"Name\": \"{Name}\",\n" +
                 $"\"FileSource\": \"{SourceFilePath}\",\n" +
                 $"\"FileTarget\": \"{TargetFilePath}\",\n" +
                 $"\"FileSize\": {FileSize},\n" +
@@ -38,28 +40,30 @@ namespace Model
             System.IO.File.AppendAllText(LogPath, Log);
             LogInitiated = true;
             UpdateState(Name, TotalFiles, TotalSize, SourceFilePath, TargetFilePath, State, CurrentFile);
-
         }
         private void UpdateState(string Name, double TotalFiles, double TotalSize, string SourceFilePath, string TargetFilePath, Workstate State, double CurrentFile)
+        //Method that updates the states JSON file
         {
-            if (!SavedStates.ContainsKey(Name))
+            if (!SaveStates.ContainsKey(Name))
             {
-                SavedStates.Add(Name, new Savestate(Name, TotalFiles, TotalSize));
+                SaveStates.Add(Name, new Savestate(Name, TotalFiles, TotalSize));
             }
-            SavedStates[Name].AssignValues(SourceFilePath, TargetFilePath, State, CurrentFile);
+            SaveStates[Name].AssignValues(SourceFilePath, TargetFilePath, State, CurrentFile);
             string StateContent = "[";
-            foreach (var SavedState in SavedStates)
+            foreach (var SaveState in SaveStates)
             {
-                StateContent += $"\n{{\n{SavedState.Value}}},";
+                StateContent += $"\n{{\n{SaveState.Value}}},";
             }
             StateContent = StateContent.Remove(StateContent.Length - 1, 1) + "\n]";
             System.IO.File.WriteAllText(StatePath, StateContent);
         }
         public void FinalizeLogs()
+        //Method that adds the final ] to the JSON log file
         {
             System.IO.File.AppendAllText(LogPath, "\n]");
         }
         public void EndState(string Name, double Current)
+        //Method that records a job as ended
         {
             UpdateState(Name, 0, 0, "", "", Workstate.END, Current);
         }
