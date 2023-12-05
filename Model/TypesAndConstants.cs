@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,9 +23,10 @@ namespace Model
         //Constants used in various places within the program
         public static readonly string DateFormat = @"dd-MM-yyyy";
         public static readonly string DateTimeFormat = @"dd-MM-yyyy HH:mm:ss";
-        public static readonly string JobsFile = @"jobs.json";
-        public static readonly string LogPath = @"logs\\files\\";
-        public static readonly string StatePath = @"logs\\state\\";
+        public static readonly string ExeLocation = AppDomain.CurrentDomain.BaseDirectory;
+        public static readonly string JobsFile = ExeLocation+@"\\jobs.json";
+        public static readonly string LogPath = ExeLocation+@"\\logs\\files\\";
+        public static readonly string StatePath = ExeLocation+@"\\logs\\state\\";
         public static readonly string SingleToDoubleBackslashRegex = @"(?<!\\)\\{1}(?!\\)|\\{3,}";
     }
     public struct Existingsave
