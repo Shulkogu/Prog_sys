@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.AccessControl;
 using System.Xml.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using ViewModel;
 
@@ -24,6 +25,11 @@ namespace View
         {
             this.existingJobs = existingJobs;
         }
+        public void UpdateLanguage(Language lang)
+        //Setter for the language
+        {
+            this.lang = lang;
+        }
         public bool UserInteraction()
         //Method used for the main user interactions
         {
@@ -41,6 +47,7 @@ namespace View
                     else
                     {
                         Console.WriteLine(Texts.JobAmountMaxed(lang));
+                        Console.ReadLine();
                     }
                     break;
 
@@ -63,6 +70,7 @@ namespace View
                     {
                         Console.Write(Texts.NoJobs(lang));
                     }
+                    Console.ReadLine();
                     break;
 
                 case ConsoleKey.D3 or ConsoleKey.NumPad3:
@@ -78,6 +86,7 @@ namespace View
                     {
                         Console.WriteLine(Texts.NoJobs(lang));
                     }
+                    Console.ReadLine();
                     break;
 
 
@@ -96,11 +105,13 @@ namespace View
                         else
                         {
                             Console.WriteLine(Texts.UnknownJob(lang));
+                            Console.ReadLine();
                         }
                     }
                     else
                     {
                         Console.WriteLine(Texts.NoJobs(lang));
+                        Console.ReadLine();
                     }
                     break;
 
@@ -109,6 +120,40 @@ namespace View
                     //If the key pressed is 5, we ask the user for a job range and we forward it to CallOrchestrator whose responsibility will be to execute the jobs
                     Console.WriteLine(Texts.PromptJobRange(lang));
                     this.CallOrchestrator(Console.ReadLine());
+                    Console.ReadLine();
+                    break;
+
+
+                case ConsoleKey.D6 or ConsoleKey.NumPad6:
+                    //If the key pressed is 6, we display the settings and allow the user to chose one to modify
+                    List<dynamic> SettingsList = new List<dynamic>{Constants.Settings.Language,Constants.Settings.LogFileType};
+                    int Choice = -1;
+                    while (Choice != 0)
+                    {
+                        do
+                        {
+                            Console.WriteLine($"0. {Texts.ReturnToHomepage(lang)}");
+                            for (int i = 0; i < SettingsList.Count; i++)
+                            {
+                                Console.WriteLine($"{i + 1}. {SettingsList[i].Value.GetType().Name} = {SettingsList[i].Value}");
+                            }
+                            try
+                            {
+                                Choice = Int32.Parse(Console.ReadLine());
+                            }
+                            catch
+                            {
+                                Choice = -1;
+                            }
+                        } while (Choice < 0 || Choice >= SettingsList.Count + 1);
+                        if (Choice > 0)
+                        {
+                            MethodInfo method = typeof(JobView).GetMethod("EnterEnumElementFromConsole").MakeGenericMethod(SettingsList[Choice - 1].Value.GetType());
+                            dynamic Setting = (method.Invoke(this, null));
+                            SettingsList[Choice - 1].Value = Setting;
+                            Constants.Settings.SaveSettings();
+                        }
+                    }
                     break;
 
 
@@ -121,7 +166,7 @@ namespace View
                     Console.WriteLine(Texts.UnknownAction(lang));
                     break;
             }
-            Console.ReadLine(); Console.Clear();
+            Console.Clear();
             return true;
         }
         public void CallOrchestrator(string criteria)
@@ -160,16 +205,16 @@ namespace View
             job.SaveType = (Savetype)Enum.Parse(typeof(Savetype), typeEntered, true);
             return job;
         }
-        public void EnterLanguageFromConsole()
-        //Method used to ask the user for the language he wants to choose within the list
+        public TEnum EnterEnumElementFromConsole<TEnum>()
+        //Generic method used to ask the user for the element he wants to choose within a generic enum
         {
             int Choice;
-            var Languages = Enum.GetValues(typeof(Language)).Cast<Language>().ToList();
+            var EnumElements = Enum.GetValues(typeof(TEnum)).Cast<TEnum>().ToList();
             do
             {
-                for (int i = 0; i < Languages.Count; i++)
+                for (int i = 0; i < EnumElements.Count; i++)
                 {
-                    Console.WriteLine(i + "." + Languages[i]);
+                    Console.WriteLine(i + "." + EnumElements[i]);
                 }
                 try
                 {
@@ -179,9 +224,9 @@ namespace View
                 {
                     Choice = -1;
                 }
-            } while (Choice < 0 || Choice >= Languages.Count);
-            this.lang = Languages[Choice];
+            } while (Choice < 0 || Choice >= EnumElements.Count);
             Console.Clear();
+            return (EnumElements[Choice]);
         }
     }
 }

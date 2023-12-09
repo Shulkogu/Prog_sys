@@ -25,6 +25,7 @@ namespace View
                         "\n3. Afficher les travaux" +
                         "\n4. Modifier un travail" +
                         "\n5. Exécuter un ou des travaux" +
+                        "\n6. Paramétrer le programme" +
                         "\nÉchap. Quitter le programme");
                 default:
                     return ("Press a key to choose a mode." +
@@ -33,7 +34,18 @@ namespace View
                         "\n3. Display jobs" +
                         "\n4. Modify a job" +
                         "\n5. Execute job(s)" +
+                        "\n6. Adjust the program's settings" +
                         "\nEscape. Close the program");
+            }
+        }
+        public static string ReturnToHomepage(Language language)
+        {
+            switch (language)
+            {
+                case Language.French:
+                    return ("Retour à l'écran d'accueil");
+                default:
+                    return ("Return to homepage");
             }
         }
         public static string UnknownAction(Language language)
