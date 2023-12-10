@@ -31,7 +31,9 @@ namespace Model
         public static readonly string SettingsFile = ExeLocation + @"\\settings.json";
         public static readonly string LogPath = ExeLocation+@"\\logs\\files\\";
         public static readonly string StatePath = ExeLocation+@"\\logs\\state\\";
+        public static readonly string CryptoSoft = ExeLocation + @"\\CryptoSoft.exe";
         public static readonly string SingleToDoubleBackslashRegex = @"(?<!\\)\\{1}(?!\\)|\\{3,}";
+        public static readonly string GetExtensionRegex = @"\..+$";
         public static readonly Settings Settings = new Settings();
         public static string GetLoggerHeader()
         {
@@ -74,6 +76,8 @@ namespace Model
         public MutableEnum<View.Language> Language = new MutableEnum <View.Language>(View.Language.English);
         [JsonInclude]
         public MutableEnum<LogFileType> LogFileType = new MutableEnum <LogFileType>(Model.LogFileType.JSON);
+        [JsonInclude]
+        public List<string> EncryptedExtensions = new List<string>();
         public bool LoadSettings()
         //Function used to load the settings stored in the settings file.
         //Returns true if a file existed and was loaded, otherwise, false.
@@ -84,7 +88,7 @@ namespace Model
                 try
                 {
                     Settings Loaded = JsonSerializer.Deserialize<Settings>(System.IO.File.ReadAllText(Constants.SettingsFile))!;
-                    this.Language=Loaded.Language;this.LogFileType=Loaded.LogFileType;
+                    this.Language=Loaded.Language;this.LogFileType=Loaded.LogFileType; this.EncryptedExtensions=Loaded.EncryptedExtensions;
                     return true;
                 }
                 catch

@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Model
 {
@@ -26,7 +27,7 @@ namespace Model
                 this.ExistingSaves = ExistingSaves;
             }
         }
-        public double? Save()
+        public (double?, double) Save(bool Encrypted)
         //This method will save the file if it is necessary (differential save) or if the savetype is complete
         //If a file was created, it returns its size, if it deliberatly wasn't, it returns null, if an error occured creating it, it returns -1
         {
@@ -37,19 +38,19 @@ namespace Model
                 //If no version of the file is found (i.e, the returned value is null), the file will be copied, but if a version was found, it will be checked for differences with the current version
                 if (NewestVersion == null || CheckForDifferences(NewestVersion))
                 {
-                    return Copy();
+                    return Copy(Encrypted);
                 }
                 else
                 {
-                    return null;
+                    return (null,0);
                 }
             }
             else
             {
-                return Copy();
+                return Copy(Encrypted);
             }
         }
-        private long Copy()
+        private (long,long) Copy(bool Encrypted)
         //This method copies a file from source to target (save folder). If the path for it doesn't exist, it will create it.
         //The new file's size will be returned. -1 Will be returned if an error occured
         {
@@ -60,13 +61,36 @@ namespace Model
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(TargetFilePath));
                 }
-                System.IO.File.Copy(this.Job.SourcePath + @"\\" + RelativeFilePath, TargetFilePath, true);
+                long Time = 0;
+                if (Encrypted)
+                {
+                    try
+                    {
+                        Process CryptoSoftProcess = new Process();
+                        CryptoSoftProcess.StartInfo.FileName = Constants.CryptoSoft;
+                        CryptoSoftProcess.StartInfo.Arguments = $"\"{this.Job.SourcePath + @"\\" + RelativeFilePath}\" \"{TargetFilePath}\" \"SUPERSECRETKEY\"";
+                        Time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                        CryptoSoftProcess.Start();
+                        while (!CryptoSoftProcess.HasExited)
+                        {
+                        }
+                        Time = DateTimeOffset.Now.ToUnixTimeMilliseconds() - Time;
+                    }
+                    catch
+                    {
+                        Time = -1;
+                    }
+                }
+                else
+                {
+                    System.IO.File.Copy(this.Job.SourcePath + @"\\" + RelativeFilePath, TargetFilePath, true);
+                }
                 long Size = new FileInfo(TargetFilePath).Length;
-                return Size;
+                return (Size,Time);
             }
             catch
             {
-                return -1;
+                return (-1,0);
             }
         }
         private string? CheckForExistingNewest()

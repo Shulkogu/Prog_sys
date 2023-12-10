@@ -55,12 +55,12 @@ namespace Model
             {
                 var Time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 File File = new File(ref FolderName, ref this.Job, RelativePath, ref ExistingSaves);
-                double? Size = File.Save();
+                (double?,double) FileInfo = File.Save(Constants.Settings.EncryptedExtensions.Contains(Regex.Match(RelativePath,Constants.GetExtensionRegex).Value));
                 //If File.Save() returned null, the file wasn't copied because it didn't need to. If it returns a negative value, an error occured
-                if (Size.HasValue)
+                if (FileInfo.Item1.HasValue)
                 {
-                    Logger.Log(this.Job.Name, this.Job.SourcePath + @"\\" + RelativePath, this.Job.TargetPath + @"\\" + FolderName + @"\\" + RelativePath, Workstate.ACTIVE, RelativeFilePaths.Length, TotalSize, Size.Value, Counter, DateTimeOffset.Now.ToUnixTimeMilliseconds() - Time);
-                    if (Size.Value >= 0)
+                    Logger.Log(this.Job.Name, this.Job.SourcePath + @"\\" + RelativePath, this.Job.TargetPath + @"\\" + FolderName + @"\\" + RelativePath, Workstate.ACTIVE, RelativeFilePaths.Length, TotalSize, FileInfo.Item1.Value, Counter, DateTimeOffset.Now.ToUnixTimeMilliseconds() - Time, FileInfo.Item2);
+                    if (FileInfo.Item1.Value >= 0)
                     {
                         WereCopied++;
                     }

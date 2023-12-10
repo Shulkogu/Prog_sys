@@ -17,6 +17,10 @@ namespace Model
         public Logger(string LogPath, string StatePath)
         //Method that initializes the logger and create the JSON file that will be used to log the copied files
         {
+            if (!Directory.Exists(LogPath))
+            {
+                Directory.CreateDirectory(LogPath);
+            }
             int Counter = 0;
             do
             {
@@ -25,9 +29,13 @@ namespace Model
             } while (System.IO.File.Exists(this.LogPath));
             System.IO.File.WriteAllText(this.LogPath, Constants.GetLoggerHeader());
             this.StatePath = StatePath + "state." + Constants.Settings.LogFileType.Value;
+            if (!Directory.Exists(StatePath))
+            {
+                Directory.CreateDirectory(StatePath);
+            }
             SaveStates = new Dictionary<string, Savestate>();
         }
-        public void Log(string Name, string SourceFilePath, string TargetFilePath, Workstate State, double TotalFiles, double TotalSize, double FileSize, double CurrentFile, float TransferTime)
+        public void Log(string Name, string SourceFilePath, string TargetFilePath, Workstate State, double TotalFiles, double TotalSize, double FileSize, double CurrentFile, float TransferTime, double EncryptionTime)
         //Method that adds logs the copy of a file. It also calls the method that updates states
         {
             string Log = "";
@@ -38,7 +46,8 @@ namespace Model
                      $"\t\t<FileSource>{SourceFilePath}</FileSource>\n" +
                      $"\t\t<FileTarget>{TargetFilePath}</FileTarget>\n" +
                      $"\t\t<FileSize>{FileSize}</FileSize>\n" +
-                     $"\t\t<FileTransfterTime>{TransferTime}</FileTransfterTime>\n" +
+                     $"\t\t<TotalFileTransfterTime>{TransferTime}</TotalFileTransfterTime>\n" +
+                     $"\t\t<EncryptionTime>{EncryptionTime}</EncryptionTime>\n" +
                      $"\t\t<Time>{DateTime.Now.ToString(Constants.DateTimeFormat)}</Time>\n" +
                      $"\t</row>";
             }
@@ -49,7 +58,8 @@ namespace Model
                     $"\t\"FileSource\": \"{SourceFilePath}\",\n" +
                     $"\t\"FileTarget\": \"{TargetFilePath}\",\n" +
                     $"\t\"FileSize\": {FileSize},\n" +
-                    $"\t\"FileTransfterTime\": {TransferTime},\n" +
+                    $"\t\"TotalFileTransfterTime\": {TransferTime},\n" +
+                    $"\t\"EncryptionTime\": {EncryptionTime},\n" +
                     $"\t\"Time\": \"{DateTime.Now.ToString(Constants.DateTimeFormat)}\"\n\t}}";
             }
             System.IO.File.AppendAllText(LogPath, Log);
