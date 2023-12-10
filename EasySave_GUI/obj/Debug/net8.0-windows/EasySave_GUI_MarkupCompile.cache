@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Gabriel\RiderProjects\Prog_sys\EasySave\EasySave_GUI\obj\Debug\net8.0-windows\
+C:\Users\Gabriel\source\repos\Prog_sys\EasySave_GUI\obj\Debug\net8.0-windows\
 EasySave_GUI
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\Gabriel\RiderProjects\Prog_sys\EasySave\EasySave_GUI\App.xaml
+C:\Users\Gabriel\source\repos\Prog_sys\EasySave_GUI\App.xaml
 2636045758
 
 5-1622940463
-198-1732652787
+198-688555687
 MainWindow.xaml;Settings.xaml;
 
-False
+True
 

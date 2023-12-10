@@ -7,6 +7,24 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <GridSplitter x:Name="TopBar" HorizontalAlignment="Center" Height="80" VerticalAlignment="Top" Width="800" Background="#FF679436"/>
+        <GridSplitter x:Name="MenuBar" HorizontalAlignment="Left" Height="390" Margin="0,80,0,0" VerticalAlignment="Top" Width="82" Background="#FF36382E"/>
+        <GridSplitter x:Name="InterfaceMenu" HorizontalAlignment="Left" Height="370" Margin="82,80,0,0" VerticalAlignment="Top" Width="718" Background="#FFD9D9D9"/>
+        <GridSplitter HorizontalAlignment="Left" Height="294" Margin="123,102,0,0" VerticalAlignment="Top" Width="636" Background="#FFEDEBD7" />
+        <Border x:Name="HomeBorder" BorderThickness="1" Margin="12,102,730,236" Background="#FFEDEBD7">
+            <Button x:Name="HomeButton" Content="Button" HorizontalAlignment="Center" Height="77" VerticalAlignment="Center" Width="39"/>
+        </Border>
+        <Border x:Name="LogsBorder" BorderThickness="1" Margin="12,198,730,140" Background="#FFEDEBD7">
+            <Button x:Name="LogsButton" Content="Button" HorizontalAlignment="Center" Height="73" Margin="0,12,0,0" VerticalAlignment="Top" Width="39"/>
+        </Border>
+        <Border x:Name="SettingsBorder" BorderThickness="1" Margin="12,294,730,44" Background="#FFEDEBD7">
+            <Button x:Name="SettingsButton" Content="Button" HorizontalAlignment="Center" Height="81" Margin="0,4,0,0" VerticalAlignment="Top" Width="39"/>
+        </Border>
+        <Border x:Name="FrenchBorder" BorderThickness="1" Margin="18,15,717,385" Background="#FFEDEBD7">
+            <Button x:Name="FrenchButton" Content="Button" HorizontalAlignment="Left" Height="34" VerticalAlignment="Center" Width="39" Margin="23,0,0,0"/>
+        </Border>
+        <Border x:Name="EnglishBorder" BorderThickness="1" Margin="81,15,644,385" Background="#FFEDEBD7">
+            <Button x:Name="EnglishButton" Content="Button" HorizontalAlignment="Center" Height="34" VerticalAlignment="Center" Width="39"/>
+        </Border>
     </Grid>
 </Window>
