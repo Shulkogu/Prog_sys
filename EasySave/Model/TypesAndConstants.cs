@@ -78,6 +78,8 @@ namespace Model
         public MutableEnum<LogFileType> LogFileType = new MutableEnum <LogFileType>(Model.LogFileType.JSON);
         [JsonInclude]
         public List<string> EncryptedExtensions = new List<string>();
+        [JsonInclude]
+        public string ForbiddenSoftware = "notepad";
         public bool LoadSettings()
         //Function used to load the settings stored in the settings file.
         //Returns true if a file existed and was loaded, otherwise, false.

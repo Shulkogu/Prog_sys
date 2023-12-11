@@ -10,6 +10,10 @@ namespace ViewModel
 {
     internal class JobOrchestrator
     {
+        public event EventHandler ForbiddenProcessStarted;
+        public event EventHandler ForbiddenProcessExited;
+        private ProcessWatcher processWatcher = new ProcessWatcher();
+        private bool ForbiddenProcessRunning;
         public List<Job> GetJobsByCriteria(string criteria, List<Job> Jobs)
         {
             //Takes a list of jobs and returns the jobs whose indexes are in the criteria
@@ -63,16 +67,41 @@ namespace ViewModel
             }
             return selectedJobs;
         }
-        public void ExecuteJobs(List<Job> Jobs)
+        public bool ExecuteJobs(List<Job> Jobs)
         //This methods execute given Jobs
         {
+            processWatcher.StartWatching();
+            this.processWatcher.ProcessStarted += ProcessStartedEventHandler;
+            this.processWatcher.ProcessExited += ProcessExitedEventHandler;
             Logger Logger = new Logger(Constants.LogPath, Constants.StatePath);
             foreach (Job Job in Jobs)
             {
+                if(ForbiddenProcessRunning)
+                {
+                    break;
+                }
+                //Test print, to be removed
+                Console.WriteLine($"Executing Job:{Job.Name}");
                 Saver saver = new Saver(Job, ref Logger);
                 saver.SaveFiles();
             }
             Logger.FinalizeLogs();
+            processWatcher.StopWatching();
+            if(ForbiddenProcessRunning)
+            {
+                return false;
+            }
+            return true;
+        }
+        private void ProcessStartedEventHandler(object sender, EventArgs e)
+        {
+            this.ForbiddenProcessRunning = true;
+            ForbiddenProcessStarted.Invoke(this, EventArgs.Empty);
+        }
+        private void ProcessExitedEventHandler(object sender, EventArgs e)
+        {
+            this.ForbiddenProcessRunning = false;
+            ForbiddenProcessExited.Invoke(this, EventArgs.Empty);
         }
     }
 }

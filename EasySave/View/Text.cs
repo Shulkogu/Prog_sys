@@ -190,5 +190,25 @@ namespace View
                     return ("End of jobs execution");
             }
         }
+        public static string ForbiddenProcessStarted(Language language)
+        {
+            switch (language)
+            {
+                case Language.French:
+                    return ("La présence d'un ou plusieurs logiciels métiers a été détectée, veuillez le/les fermer, sinon le logiciel se fermera avant la prochaine exécution d'un travail");
+                default:
+                    return ("The execution of one or multiple forbidden software was detected, please close it/them, otherwise the logiciel will close itself before the next job execution");
+            }
+        }
+        public static string ForbiddenProcessExited(Language language)
+        {
+            switch (language)
+            {
+                case Language.French:
+                    return ("Le ou les logiciels métiers ont été fermés");
+                default:
+                    return ("No more forbidden software is running");
+            }
+        }
     }
 }
