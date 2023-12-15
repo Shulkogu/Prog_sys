@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="EasySave_GUI.SettingsView.ViewSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:EasySave_GUI.SettingsView"
+             mc:Ignorable="d" d:DesignHeight="306.333" d:DesignWidth="589.733">
+
+    <Grid Background="white" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid DockPanel.Dock="Top" Name="grid1" ShowGridLines="false" Width="578" Height="285" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="9*"/>
+                    <ColumnDefinition Width="184*"/>
+                    <ColumnDefinition Width="15*"/>
+                    <ColumnDefinition Width="178*"/>
+                    <ColumnDefinition Width="32*"/>
+                    <ColumnDefinition Width="161*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="73*"/>
+                    <RowDefinition Height="171*"/>
+                    <RowDefinition Height="112*"/>
+                    <RowDefinition Height="29*"/>
+                    <RowDefinition Height="131*"/>
+                    <RowDefinition Height="190*"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Setting" Margin="1,-9,74,2" RenderTransformOrigin="0.5,0.5" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="3" Grid.Column="1" >
+                    <Label.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-0.115"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Label.RenderTransform>
+                </Label>
+
+
+                <TextBox HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" Text="{Binding NewExtension, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="139" Margin="0,7,0,0" Height="24" Grid.Column="1"/>
+                <Button Grid.Row="4" Content="Add Extension" HorizontalAlignment="Center" VerticalAlignment="Top" Width="80" Command="{Binding AddExtensionCommand}" Margin="0,33,0,0" RenderTransformOrigin="0.352,2.396" Height="20" Grid.Column="1" FontSize="8" />
+                <Label Content="Extension pour chiffrer :" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="139"  FontSize="10"  Height="22" Grid.RowSpan="3" Grid.Column="1" />
+
+                <ScrollViewer Grid.Column="1" Grid.Row="4" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="0,53,0,0" Grid.RowSpan="2" Width="190" >
+                    <ListBox ItemsSource="{Binding AddedExtensions}" Width="170" PreviewMouseWheel="ListBox_PreviewMouseWheel" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding}" VerticalAlignment="Center" Width="110" />
+                                    <Button Content="X" Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Margin="5,0,0,0" HorizontalAlignment="Right" Width="20" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+
+
+                <Label Grid.Column="3" Content="Extension prioritaire :" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Top" Width="138"  Height="30" Grid.RowSpan="2" FontSize="10"/>
+                <TextBox Grid.Column="3" HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" Text="{Binding NewPrioritizedExtension, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="139" Margin="0,7,0,0" Height="24"/>
+                <Button Grid.Column="3" Grid.Row="4" Content="Add Extension" HorizontalAlignment="Center" VerticalAlignment="Top" Width="80" Command="{Binding AddPrioritizedExtensionCommand}" Margin="0,33,0,0" RenderTransformOrigin="0.352,2.396" Height="20" FontSize="8" />
+                <ScrollViewer Grid.Column="3" Grid.Row="4" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="0,53,0,0" Grid.RowSpan="2" Width="190" >
+                    <ListBox ItemsSource="{Binding AddedPrioritizedExtensions}" Width="190" PreviewMouseWheel="ListBox_PreviewMouseWheel" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding}" VerticalAlignment="Center" Width="130" />
+                                    <Button Content="X" Command="{Binding DataContext.RemovePrioritizedExtensionCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Margin="5,0,0,0" HorizontalAlignment="Right" Width="20" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+
+
+                <Label Grid.Column="1" Content="Choix de la langue : " HorizontalAlignment="Left" Margin="39,29,0,0" VerticalAlignment="Top" Width="102" FontSize="10"  Height="25" RenderTransformOrigin="0.261,0.501" Grid.RowSpan="2"/>
+                <ComboBox Name="dropdownMenu" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150"
+                  SelectedIndex="0" SelectedItem="{Binding SelectedItem}" Grid.Column="1" Grid.Row="1" Height="24" Margin="0,29,0,0">
+                    <ComboBoxItem Content="Francais"/>
+                    <ComboBoxItem Content="Anglais"/>
+                </ComboBox>
+                <TextBlock Text="{Binding SelectedItem}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,21,0,0" Grid.Column="1" Height="16" Grid.Row="1" Width="0"/>
+
+
+                <Label Grid.Column="3" Content="Choix du Format : " HorizontalAlignment="Center" Margin="0,29,0,0" VerticalAlignment="Top" Width="102" FontSize="10"  Height="25" Grid.RowSpan="2"/>
+                <ComboBox Name="dropdownMenu1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150"
+                  SelectedIndex="0" SelectedItem="{Binding SelectedItem}" Grid.Column="3" Margin="0,29,0,0" Grid.Row="1" Height="24">
+                    <ComboBoxItem Content="XML"/>
+                    <ComboBoxItem Content="JSON"/>
+                </ComboBox>
+                <TextBlock Text="{Binding SelectedItem}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,21,0,0" Grid.Column="1" Height="16" Grid.Row="1" Width="0"/>
+
+
+                <Label Grid.Column="5" Content="Taille Maximal en Mo : " HorizontalAlignment="Center" Margin="0,4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="108" FontSize="10"  Height="30"/>
+                <TextBox Grid.Column="5" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" Margin="0,34,0,0" Height="18"
+         Opacity="0.5" Text="Taille_du_Fichier" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+
+
+                <Label Grid.Column="5" Content="Logiciel Metier : " HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Top" Width="80" FontSize="10"  Height="24" Grid.RowSpan="2" Margin="0,11,0,0" />
+                <TextBox Grid.Column="5" HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" Margin="0,19,0,0" Height="18"
+Opacity="0.5" Text="Logiciel" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+
+            </Grid>
+        </DockPanel>
+    </Grid>
+</UserControl>
