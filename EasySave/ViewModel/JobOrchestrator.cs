@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using View;
@@ -10,10 +11,12 @@ namespace ViewModel
 {
     internal class JobOrchestrator
     {
-        public event EventHandler ForbiddenProcessStarted;
-        public event EventHandler ForbiddenProcessExited;
         private ProcessWatcher processWatcher = new ProcessWatcher();
         private bool ForbiddenProcessRunning;
+        List<(Saver, Task)> Tasks = new List<(Saver, Task)>();
+        Logger? Logger = null;
+        bool JobsExecuting = false;
+        object LockPriorityEvent = new object();
         public List<Job> GetJobsByCriteria(string criteria, List<Job> Jobs)
         {
             //Takes a list of jobs and returns the jobs whose indexes are in the criteria
@@ -67,41 +70,119 @@ namespace ViewModel
             }
             return selectedJobs;
         }
-        public bool ExecuteJobs(List<Job> Jobs)
+        public async void ExecuteJobs(List<Job> Jobs)
         //This methods execute given Jobs
         {
+            if(this.Logger == null)
+            {
+                this.Logger = new Logger(Constants.LogPath, Constants.StatePath);
+            }
             processWatcher.StartWatching();
             this.processWatcher.ProcessStarted += ProcessStartedEventHandler;
             this.processWatcher.ProcessExited += ProcessExitedEventHandler;
-            Logger Logger = new Logger(Constants.LogPath, Constants.StatePath);
-            foreach (Job Job in Jobs)
+            try
             {
-                if(ForbiddenProcessRunning)
+                foreach (Job Job in Jobs)
                 {
-                    break;
+                    if (!Tasks.Any(x => x.Item1.Job.Name == Job.Name))
+                    {
+                        Saver saver = new Saver(Job, ref Logger, ref LockPriorityEvent);
+                        saver.PrioritizedCopyStarted += JobStartedPriority;
+                        saver.PrioritizedCopyEnded += JobEndedPriority;
+                        Tasks.Add((saver, Task.Run(() => {
+                            saver.SaveFiles();
+                            DeleteFinishedJobTask(saver);
+                            }
+                        )));
+                    }
                 }
-                //Test print, to be removed
-                Console.WriteLine($"Executing Job:{Job.Name}");
-                Saver saver = new Saver(Job, ref Logger);
-                saver.SaveFiles();
+                if (!JobsExecuting)
+                {
+                    JobsExecuting = true;
+                    await Task.WhenAll(Tasks.Select(x => x.Item2));
+                    //Console.WriteLine("all jobs finished");
+                    Logger.FinalizeLogs();
+                    Logger = null;
+                    processWatcher.StopWatching();
+                    JobsExecuting = false;
+                }
             }
-            Logger.FinalizeLogs();
-            processWatcher.StopWatching();
-            if(ForbiddenProcessRunning)
+            catch
             {
-                return false;
             }
-            return true;
+        }
+        private void DeleteFinishedJobTask(Saver saver)
+        {
+            Tasks.RemoveAll(x => x.Item1 == saver);
+        }
+        private void JobStartedPriority(object sender, EventArgs e)
+        {
+            if ((sender is Saver saver)  && (saver.CurrentPriority==FilePriority.HIGH))
+            {
+                //Console.WriteLine($"The job {saver.Job.Name} is copying prioritized files.");
+                foreach ((Saver, Task) NotPrioritizedTask in Tasks.Where(x => x.Item1 != sender))
+                {
+                    NotPrioritizedTask.Item1.Workstate = Workstate.PAUSED_UNPRIORITIZED;
+                    NotPrioritizedTask.Item1.ManualResetEvent.Reset();
+                    Logger.PauseState(NotPrioritizedTask.Item1.Job.Name, Workstate.PAUSED_UNPRIORITIZED);
+                    //Console.WriteLine($"Job : {NotPrioritizedTask.Item1.Job.Name} is paused.");
+                }
+            }
+        }
+        private void JobEndedPriority(object sender, EventArgs e)
+        {
+            if ((sender is Saver saver) && (saver.CurrentPriority == FilePriority.HIGH))
+            {
+                //Console.WriteLine($"The job {saver.Job.Name} finished copying prioritized files.");
+                foreach ((Saver, Task) NotPrioritizedTask in Tasks.Where(x => x.Item1 != sender))
+                {
+                    NotPrioritizedTask.Item1.Workstate = Workstate.ACTIVE;
+                    NotPrioritizedTask.Item1.ManualResetEvent.Set();
+                    Logger.ResumeState(NotPrioritizedTask.Item1.Job.Name, Workstate.ACTIVE);
+                    //Console.WriteLine($"Job : {NotPrioritizedTask.Item1.Job.Name} is resumed.");
+                }
+            }
+        }
+        public void PauseJob(Job Job)
+        {
+            Saver saver = Tasks.Where(x => x.Item1.Job == Job).First().Item1;
+            if( saver != null)
+            {
+                saver.Workstate = Workstate.PAUSED_USER;
+                saver.ManualResetEvent.Reset();
+                Logger.PauseState(saver.Job.Name, Workstate.PAUSED_USER);
+            }
+        }
+        public void ResumeJob(Job Job)
+        {
+            Saver saver = Tasks.Where(x => x.Item1.Job == Job).First().Item1;
+            if (saver != null && !this.ForbiddenProcessRunning && saver.Workstate == Workstate.PAUSED_USER)
+            {
+                saver.Workstate = Workstate.ACTIVE;
+                saver.ManualResetEvent.Set();
+                Logger.ResumeState(saver.Job.Name, Workstate.ACTIVE);
+            }
         }
         private void ProcessStartedEventHandler(object sender, EventArgs e)
         {
             this.ForbiddenProcessRunning = true;
-            ForbiddenProcessStarted.Invoke(this, EventArgs.Empty);
+            foreach ((Saver, Task) NotPrioritizedTasks in Tasks.Where(x => x.Item1.Workstate != Workstate.PAUSED_UNPRIORITIZED && x.Item1.Workstate != Workstate.PAUSED_USER))
+            {
+                NotPrioritizedTasks.Item1.Workstate = Workstate.PAUSED_FORBIDDENSOFTWARE;
+                NotPrioritizedTasks.Item1.ManualResetEvent.Reset();
+                Logger.PauseState(NotPrioritizedTasks.Item1.Job.Name, Workstate.PAUSED_FORBIDDENSOFTWARE);
+            }
+
         }
         private void ProcessExitedEventHandler(object sender, EventArgs e)
         {
             this.ForbiddenProcessRunning = false;
-            ForbiddenProcessExited.Invoke(this, EventArgs.Empty);
+            foreach ((Saver, Task) NotPrioritizedTasks in Tasks.Where(x => x.Item1.Workstate != Workstate.PAUSED_UNPRIORITIZED && x.Item1.Workstate != Workstate.PAUSED_USER))
+            {
+                NotPrioritizedTasks.Item1.Workstate = Workstate.ACTIVE;
+                NotPrioritizedTasks.Item1.ManualResetEvent.Set();
+                Logger.ResumeState(NotPrioritizedTasks.Item1.Job.Name, Workstate.ACTIVE);
+            }
         }
     }
 }

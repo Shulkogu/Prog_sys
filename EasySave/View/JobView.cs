@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using ViewModel;
+using System.Threading;
 
 namespace View
 {
@@ -19,17 +20,6 @@ namespace View
         {
             this.lang = (language == null) ? Language.English : language.Value;
             this.existingJobs = existingJobs;
-            this.jobOrchestrator.ForbiddenProcessStarted += ForbiddenProcessStarted;
-            this.jobOrchestrator.ForbiddenProcessExited += ForbiddenProcessExited;
-        }
-        private void ForbiddenProcessStarted(object sender, EventArgs e)
-        {
-            Console.WriteLine(Texts.ForbiddenProcessStarted(lang));
-
-        }
-        private void ForbiddenProcessExited(object sender, EventArgs e)
-        {
-            Console.WriteLine(Texts.ForbiddenProcessExited(lang));
         }
         public void UpdateJobsList(List<Job> existingJobs)
         //Setter for the existingJobs jobs list
@@ -130,11 +120,8 @@ namespace View
                 case ConsoleKey.D5 or ConsoleKey.NumPad5:
                     //If the key pressed is 5, we ask the user for a job range and we forward it to CallOrchestrator whose responsibility will be to execute the jobs
                     Console.WriteLine(Texts.PromptJobRange(lang));
-                    if (!this.CallOrchestrator(Console.ReadLine()))
-                    {
-                        return false;
-                    }
-                    Console.WriteLine(Texts.ExecutionEnd(lang));
+                    this.CallOrchestrator(Console.ReadLine());
+                    //Console.WriteLine(Texts.ExecutionEnd(lang));
                     Console.ReadLine();
                     break;
 
@@ -184,10 +171,10 @@ namespace View
             Console.Clear();
             return true;
         }
-        public bool CallOrchestrator(string criteria)
+        public void CallOrchestrator(string criteria)
         //Method used to call the Orchestrator with the list of jobs and the range of jobs to execute
         {
-            return(this.jobOrchestrator.ExecuteJobs(this.jobOrchestrator.GetJobsByCriteria(criteria, this.existingJobs)));
+            this.jobOrchestrator.ExecuteJobs(this.jobOrchestrator.GetJobsByCriteria(criteria, this.existingJobs));
         }
         private Job EnterDetailsFromConsole(Job? jobToModify = null)
         //Method used to ask the user for a job's details when creating/modifying one

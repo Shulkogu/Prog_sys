@@ -17,17 +17,19 @@ namespace Model
         private Job Job;
         private string RelativeFilePath;
         private List<Existingsave>? ExistingSaves;
-        public File(ref string SaveSubfolder, ref Job Job, string RelativeFilePath, [Optional] ref List<Existingsave> ExistingSaves)
+        private bool Encrypted;
+        public File(ref string SaveSubfolder, ref Job Job, string RelativeFilePath, bool Encrypted, [Optional] ref List<Existingsave> ExistingSaves)
         {
             this.SaveSubfolder = SaveSubfolder;
             this.Job = Job;
             this.RelativeFilePath = RelativeFilePath;
+            this.Encrypted = Encrypted;
             if (ExistingSaves != null && ExistingSaves.Count > 0)
             {
                 this.ExistingSaves = ExistingSaves;
             }
         }
-        public (double?, double) Save(bool Encrypted)
+        public (double?, double) Save()
         //This method will save the file if it is necessary (differential save) or if the savetype is complete
         //If a file was created, it returns its size, if it deliberatly wasn't, it returns null, if an error occured creating it, it returns -1
         {
@@ -36,9 +38,17 @@ namespace Model
                 //If the savetype is differential, the newest saved version of the file will be searched for
                 string? NewestVersion = CheckForExistingNewest();
                 //If no version of the file is found (i.e, the returned value is null), the file will be copied, but if a version was found, it will be checked for differences with the current version
-                if (NewestVersion == null || CheckForDifferences(NewestVersion))
+                if (NewestVersion == null)
                 {
-                    return Copy(Encrypted);
+                    return Copy(null);
+                }
+                else if(this.Encrypted)
+                {
+                    return Copy(NewestVersion);
+                }
+                else if(CheckForDifferences(NewestVersion))
+                {
+                    return Copy(null);
                 }
                 else
                 {
@@ -47,50 +57,68 @@ namespace Model
             }
             else
             {
-                return Copy(Encrypted);
+                return Copy(null);
             }
         }
-        private (long,long) Copy(bool Encrypted)
+        private (long?,long) Copy(string? NewestVersion)
         //This method copies a file from source to target (save folder). If the path for it doesn't exist, it will create it.
         //The new file's size will be returned. -1 Will be returned if an error occured
         {
+            long Size = new FileInfo(this.Job.SourcePath + @"\\" + RelativeFilePath).Length;
+            bool OverMaxSimultaneousSize = Size >= Constants.Settings.MaxSimultaneousFileSize;
             try
             {
-                string TargetFilePath = this.Job.TargetPath + @"\\" + this.SaveSubfolder + @"\\" + RelativeFilePath;
-                if (!Directory.Exists(Path.GetDirectoryName(TargetFilePath)))
+                if (OverMaxSimultaneousSize)
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(TargetFilePath));
+                    //Console.WriteLine($"wanting to copy big file: {this.Job.SourcePath + @"\\" + RelativeFilePath}");
+                    Constants.SmallFilesAuthorized.WaitOne(); //First, it waits for potential other big files to finish copying
+                    //Console.WriteLine($"file: {this.Job.SourcePath + @"\\" + RelativeFilePath} finished waiting, will block other big files from copying");
+                    Constants.BlockBigFiles();//Then, it blocks other potential big files from copying
                 }
+                string TargetFilePath = this.Job.TargetPath + @"\\" + this.SaveSubfolder + @"\\" + RelativeFilePath;
                 long Time = 0;
                 if (Encrypted)
                 {
                     try
-                    {
+                    { 
                         Process CryptoSoftProcess = new Process();
                         CryptoSoftProcess.StartInfo.FileName = Constants.CryptoSoft;
-                        CryptoSoftProcess.StartInfo.Arguments = $"\"{this.Job.SourcePath + @"\\" + RelativeFilePath}\" \"{TargetFilePath}\" \"SUPERSECRETKEY\"";
+                        CryptoSoftProcess.StartInfo.Arguments = $"{((NewestVersion != null) ? $"-d {NewestVersion}" : "")}\"{this.Job.SourcePath + @"\\" + RelativeFilePath}\" \"{TargetFilePath}\" \"SUPERSECRETKEY\"";
                         Time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                         CryptoSoftProcess.Start();
-                        while (!CryptoSoftProcess.HasExited)
-                        {
-                        }
+                        CryptoSoftProcess.WaitForExit();
                         Time = DateTimeOffset.Now.ToUnixTimeMilliseconds() - Time;
+                        if(CryptoSoftProcess.ExitCode == 1)
+                        {
+                            return (null, Time);
+                        }
                     }
                     catch
                     {
-                        Time = -1;
+                        return (-1, -1);
                     }
                 }
                 else
                 {
+                    if (!Directory.Exists(Path.GetDirectoryName(TargetFilePath)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(TargetFilePath));
+                    }
                     System.IO.File.Copy(this.Job.SourcePath + @"\\" + RelativeFilePath, TargetFilePath, true);
                 }
-                long Size = new FileInfo(TargetFilePath).Length;
                 return (Size,Time);
             }
             catch
             {
                 return (-1,0);
+            }
+            finally
+            { //This block gets executed no matter what (whether the an exception was caught, wether something was returned)
+                if(OverMaxSimultaneousSize)
+                {
+                    //Console.WriteLine($"file: {this.Job.SourcePath + @"\\" + RelativeFilePath} finished copying, the copy of other big files will be authorized");
+                    Constants.AuthorizeBigFiles(); //If it blocked other big files from copying, now that the copy is finished, it unblocks them
+                }
             }
         }
         private string? CheckForExistingNewest()

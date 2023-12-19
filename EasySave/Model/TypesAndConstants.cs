@@ -35,6 +35,22 @@ namespace Model
         public static readonly string SingleToDoubleBackslashRegex = @"(?<!\\)\\{1}(?!\\)|\\{3,}";
         public static readonly string GetExtensionRegex = @"\..+$";
         public static readonly Settings Settings = new Settings();
+        public static ManualResetEvent SmallFilesAuthorized = new ManualResetEvent(true);
+        private static object Lock = new object();
+        public static void BlockBigFiles()
+        {
+            lock (Lock)
+            {
+                SmallFilesAuthorized.Reset();
+            }
+        }
+        public static void AuthorizeBigFiles()
+        {
+            lock (Lock)
+            {
+                SmallFilesAuthorized.Set();
+            }
+        }
         public static string GetLoggerHeader()
         {
             switch (Constants.Settings.LogFileType.Value)
@@ -80,6 +96,10 @@ namespace Model
         public List<string> EncryptedExtensions = new List<string>();
         [JsonInclude]
         public string ForbiddenSoftware = "notepad";
+        [JsonInclude]
+        public long MaxSimultaneousFileSize = 40000;
+        [JsonInclude]
+        public List<string> PrioritizedExtensions = [".jpg"];
         public bool LoadSettings()
         //Function used to load the settings stored in the settings file.
         //Returns true if a file existed and was loaded, otherwise, false.
@@ -134,6 +154,10 @@ namespace Model
         {
             this.SourceFilePath = SourceFilePath; this.TargetFilePath = TargetFilePath; this.State = State; this.CurrentFile = CurrentFile;
         }
+        public void AssignValues(string SourceFilePath, string TargetFilePath, Workstate State)
+        {
+            this.SourceFilePath = SourceFilePath; this.TargetFilePath = TargetFilePath; this.State = State;
+        }
         public override string ToString()
         {
             if(Constants.Settings.LogFileType.Value == LogFileType.XML)
@@ -172,11 +196,19 @@ namespace Model
     public enum Workstate
     {
         ACTIVE,
-        END
+        END,
+        PAUSED_UNPRIORITIZED,
+        PAUSED_FORBIDDENSOFTWARE,
+        PAUSED_USER
     }
     public enum LogFileType
     {
         JSON,
         XML
+    }
+    public enum FilePriority
+    {
+        HIGH,
+        NORMAL
     }
 }
