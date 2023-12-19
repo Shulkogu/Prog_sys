@@ -1,11 +1,10 @@
 ﻿using System.Windows.Controls;
-using static EasySave_GUI.HomeWindow;
 
 namespace EasySave_GUI.SaveView;
 
-public partial class ViewSave
+public partial class UserControlSave : UserControl
 {
-    public ViewSave()
+    public UserControlSave()
     {
         InitializeComponent();
     }

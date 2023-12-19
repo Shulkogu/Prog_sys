@@ -9,6 +9,11 @@
       "EasySave_GUI/1.0.0": {
         "runtime": {
           "EasySave_GUI.dll": {}
+        },
+        "resources": {
+          "fr/EasySave_GUI.resources.dll": {
+            "locale": "fr"
+          }
         }
       }
     }

@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:EasySave_GUI.SaveView"
+             xmlns:listView1="clr-namespace:EasySave_GUI.ListView"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        
+        <listView1:ViewList/>
     </Grid>
 </UserControl>

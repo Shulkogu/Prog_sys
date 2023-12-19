@@ -16,4 +16,32 @@
       </Page>
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="Language\Ressources.fr.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Ressources.fr.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Language\Ressources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Ressources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Language\Ressources.fr.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Ressources.fr.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Language\Ressources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Ressources.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="ViewController\" />
+    </ItemGroup>
+
 </Project>
