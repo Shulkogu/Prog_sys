@@ -83,7 +83,7 @@ namespace Model
                     { 
                         Process CryptoSoftProcess = new Process();
                         CryptoSoftProcess.StartInfo.FileName = Constants.CryptoSoft;
-                        CryptoSoftProcess.StartInfo.Arguments = $"{((NewestVersion != null) ? $"-d {NewestVersion}" : "")}\"{this.Job.SourcePath + @"\\" + RelativeFilePath}\" \"{TargetFilePath}\" \"SUPERSECRETKEY\"";
+                        CryptoSoftProcess.StartInfo.Arguments = $"{((NewestVersion != null) ? $"-d \"{NewestVersion}\" " : "")}\"{this.Job.SourcePath + @"\\" + RelativeFilePath}\" \"{TargetFilePath}\" \"SUPERSECRETKEY\"";
                         Time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                         CryptoSoftProcess.Start();
                         CryptoSoftProcess.WaitForExit();
