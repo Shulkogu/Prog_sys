@@ -44,4 +44,46 @@
       <Folder Include="ViewController\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="obj\EasySave_GUI.csproj.nuget.dgspec.json" />
+      <Content Include="obj\EasySave_GUI.csproj.nuget.g.props" />
+      <Content Include="obj\EasySave_GUI.csproj.nuget.g.targets" />
+      <None Remove="icon\accueil.png" />
+      <Resource Include="icon\accueil.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="icon\36020.ico" />
+      <Resource Include="icon\36020.ico">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="icon\bouton-modifier.png" />
+      <Resource Include="icon\bouton-modifier.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="icon\creer.png" />
+      <Resource Include="icon\creer.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="icon\disquette.png" />
+      <Resource Include="icon\disquette.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="icon\france.png" />
+      <Resource Include="icon\france.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="icon\parametres.png" />
+      <Resource Include="icon\parametres.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="icon\royaume-uni.png" />
+      <Resource Include="icon\royaume-uni.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="icon\un-journal.png" />
+      <Resource Include="icon\un-journal.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
 </Project>
