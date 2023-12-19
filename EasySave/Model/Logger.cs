@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -22,16 +24,42 @@ namespace Model
             {
                 Directory.CreateDirectory(LogPath);
             }
-            int Counter = 0;
-            do
+            this.LogPath = LogPath + @"\\" + DateTime.Now.ToString(Constants.DateFormat) + "." + Constants.Settings.LogFileType.Value;
+            bool ProperFormat = false;
+            //If a daily log file already exists
+            if (System.IO.File.Exists(this.LogPath))
             {
-                Counter++;
-                this.LogPath = LogPath + @"\\" + DateTime.Now.ToString(Constants.DateFormat) + "_" + Counter + "." + Constants.Settings.LogFileType.Value;
-            } while (System.IO.File.Exists(this.LogPath));
-            System.IO.File.WriteAllText(this.LogPath, Constants.GetLoggerHeader());
-            if(System.IO.File.Exists(this.LogPath))
+                //It is opened
+                FileStream File = new(this.LogPath, FileMode.Open);
+                byte[] Beginning = Encoding.UTF8.GetBytes(Constants.GetLoggerHeader() + "\n");
+                byte[] Ending = Encoding.UTF8.GetBytes(Constants.GetLoggerFooter());
+                //Its size is checked to see if it is big enough to contain at least a header, footer and some data
+                if (File.Length > Beginning.Length + Ending.Length)
+                {
+                    byte[] BeginningChunk = new byte[Beginning.Length];
+                    File.ReadExactly(BeginningChunk, 0, Beginning.Length);
+                    //We check if the file starts with the typical header
+                    if (BeginningChunk.AsSpan().SequenceEqual(Beginning))
+                    {
+                        byte[] EndingChunk = new byte[Ending.Length];
+                        File.Seek(-Ending.Length, SeekOrigin.End);
+                        File.ReadExactly(EndingChunk, 0, Ending.Length);
+                        //Then, if it ends with the typical footer
+                        if(EndingChunk.AsSpan().SequenceEqual(Ending))
+                        {
+                            //If all the tests passed, the original footer is removed and the logging can start on that file
+                            ProperFormat = true;
+                            File.SetLength(File.Length - Ending.Length);
+                            LogInitiated = true;
+                        }
+                    }
+                }
+                File.Close();
+            }
+            //If there exist no daily log with the right format, a new file is created with the proper header
+            if(!ProperFormat)
             {
-
+                System.IO.File.WriteAllText(this.LogPath, Constants.GetLoggerHeader());
             }
             this.StatePath = StatePath + "state." + Constants.Settings.LogFileType.Value;
             if (!Directory.Exists(StatePath))
@@ -46,6 +74,14 @@ namespace Model
             lock (Locker)
             {
                 string Log = "";
+                //If the current log file isn't named according to the current date, a new file is created with the current date.
+                //Example: Log process is started at 23:59 and a file is copied at 00:00 (the next day)
+                if (!this.LogPath.EndsWith(@"\\" + DateTime.Now.ToString(Constants.DateFormat) + "." + Constants.Settings.LogFileType.Value))
+                {
+                    this.LogPath = LogPath + @"\\" + DateTime.Now.ToString(Constants.DateFormat) + "." + Constants.Settings.LogFileType.Value;
+                    System.IO.File.WriteAllText(this.LogPath, Constants.GetLoggerHeader());
+                    LogInitiated = false;
+                }
                 if (Constants.Settings.LogFileType.Value == LogFileType.XML)
                 {
                     Log = $"\n\t<row>\n" +
