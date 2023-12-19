@@ -89,6 +89,11 @@ namespace ViewModel
                         Saver saver = new Saver(Job, ref Logger, ref LockPriorityEvent);
                         saver.PrioritizedCopyStarted += JobStartedPriority;
                         saver.PrioritizedCopyEnded += JobEndedPriority;
+                        if(ForbiddenProcessRunning)
+                        {
+                            saver.Workstate = Workstate.PAUSED_FORBIDDENSOFTWARE;
+                            saver.ManualResetEvent.Reset();
+                        }
                         Tasks.Add((saver, Task.Run(() => {
                             saver.SaveFiles();
                             DeleteFinishedJobTask(saver);

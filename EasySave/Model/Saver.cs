@@ -55,12 +55,11 @@ namespace Model
         public void SaveFiles()
         //For all the paths within RelativeFilePaths, a File object will be created, the object will have the responsibility of saving the file or not. The time it took to treat the file is counted, and the logger is called.
         {
-            Workstate = Workstate.ACTIVE;
             double TotalSize = RelativeFilePaths.Select(x => x.Item1).Sum(x => new FileInfo(this.Job.SourcePath + @"\\" + x).Length);
             double Counter = 1; //Keeps track of the current file N°
             string FolderName = (ExistingSaves != null && ExistingSaves.Count > 0 ? Convert.ToString(ExistingSaves[0].SaveNumber + 1) : "1") + "_" + DateTime.Now.ToString(Constants.DateFormat);
             Directory.CreateDirectory(this.Job.TargetPath + @"\\" + FolderName);
-            Logger.CreateState(this.Job.Name, RelativeFilePaths.Count, TotalSize);
+            Logger.CreateState(this.Job.Name, RelativeFilePaths.Count, TotalSize,Workstate);
             foreach (FilePriority FilePriority in Enum.GetValues(typeof(FilePriority)))
             {
                 if (RelativeFilePaths.Any(x => x.Item2 == FilePriority))

@@ -29,6 +29,10 @@ namespace Model
                 this.LogPath = LogPath + @"\\" + DateTime.Now.ToString(Constants.DateFormat) + "_" + Counter + "." + Constants.Settings.LogFileType.Value;
             } while (System.IO.File.Exists(this.LogPath));
             System.IO.File.WriteAllText(this.LogPath, Constants.GetLoggerHeader());
+            if(System.IO.File.Exists(this.LogPath))
+            {
+
+            }
             this.StatePath = StatePath + "state." + Constants.Settings.LogFileType.Value;
             if (!Directory.Exists(StatePath))
             {
@@ -115,13 +119,14 @@ namespace Model
         {
             UpdateState(Name, "", "", Workstate.END, Current);
         }
-        public void CreateState(string Name, double TotalFiles, double TotalSize)
+        public void CreateState(string Name, double TotalFiles, double TotalSize, Workstate Workstate)
         {
             lock (Locker)
             {
                 if (!SaveStates.ContainsKey(Name))
                 {
                     SaveStates.Add(Name, new Savestate(Name, TotalFiles, TotalSize));
+                    UpdateState(Name, "", "", Workstate,null);
                 }
             }
         }
