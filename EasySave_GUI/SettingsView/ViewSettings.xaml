@@ -38,17 +38,17 @@
                 </Label>
 
 
-                <TextBox HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" Text="{Binding NewExtension, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="139" Margin="0,7,0,0" Height="24" Grid.Column="1"/>
-                <Button Grid.Row="4" Content="Add Extension" HorizontalAlignment="Center" VerticalAlignment="Top" Width="80" Command="{Binding AddExtensionCommand}" Margin="0,33,0,0" RenderTransformOrigin="0.352,2.396" Height="20" Grid.Column="1" FontSize="8" />
+                <TextBox HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" Text="{Binding NewEncryptedExtension, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="139" Margin="0,7,0,0" Height="24" Grid.Column="1"/>
+                <Button Grid.Row="4" Content="Add Extension" HorizontalAlignment="Center" VerticalAlignment="Top" Width="80" Command="{Binding AddEncryptedExtensionCommand}" Margin="0,33,0,0" RenderTransformOrigin="0.352,2.396" Height="20" Grid.Column="1" FontSize="8" />
                 <Label Content="Extension pour chiffrer :" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="139"  FontSize="10"  Height="22" Grid.RowSpan="3" Grid.Column="1" />
 
                 <ScrollViewer Grid.Column="1" Grid.Row="4" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="0,53,0,0" Grid.RowSpan="2" Width="190" >
-                    <ListBox ItemsSource="{Binding AddedExtensions}" Width="170" PreviewMouseWheel="ListBox_PreviewMouseWheel" >
+                    <ListBox ItemsSource="{Binding EncryptedExtensions}" Width="170" PreviewMouseWheel="ListBox_PreviewMouseWheel" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{Binding}" VerticalAlignment="Center" Width="110" />
-                                    <Button Content="X" Command="{Binding DataContext.RemoveExtensionCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Margin="5,0,0,0" HorizontalAlignment="Right" Width="20" />
+                                    <Button Content="X" Command="{Binding DataContext.RemoveEncryptedExtensionCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Margin="5,0,0,0" HorizontalAlignment="Right" Width="20" />
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -60,7 +60,7 @@
                 <TextBox Grid.Column="3" HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" Text="{Binding NewPrioritizedExtension, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="139" Margin="0,7,0,0" Height="24"/>
                 <Button Grid.Column="3" Grid.Row="4" Content="Add Extension" HorizontalAlignment="Center" VerticalAlignment="Top" Width="80" Command="{Binding AddPrioritizedExtensionCommand}" Margin="0,33,0,0" RenderTransformOrigin="0.352,2.396" Height="20" FontSize="8" />
                 <ScrollViewer Grid.Column="3" Grid.Row="4" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="0,53,0,0" Grid.RowSpan="2" Width="190" >
-                    <ListBox ItemsSource="{Binding AddedPrioritizedExtensions}" Width="190" PreviewMouseWheel="ListBox_PreviewMouseWheel" >
+                    <ListBox ItemsSource="{Binding PrioritizedExtensions}" Width="190" PreviewMouseWheel="ListBox_PreviewMouseWheel" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -74,31 +74,30 @@
 
 
                 <Label Grid.Column="1" Content="Choix de la langue : " HorizontalAlignment="Left" Margin="39,29,0,0" VerticalAlignment="Top" Width="102" FontSize="10"  Height="25" RenderTransformOrigin="0.261,0.501" Grid.RowSpan="2"/>
-                <ComboBox Name="dropdownMenu" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150"
-                  SelectedIndex="0" SelectedItem="{Binding SelectedItem}" Grid.Column="1" Grid.Row="1" Height="24" Margin="0,29,0,0">
-                    <ComboBoxItem Content="Francais"/>
-                    <ComboBoxItem Content="Anglais"/>
+                <ComboBox ItemsSource="{Binding Languages}" Name="dropdownMenu" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150"
+                  SelectedIndex="0" SelectedItem="{Binding Language}" Grid.Column="1" Grid.Row="1" Height="24" Margin="0,29,0,0">
                 </ComboBox>
                 <TextBlock Text="{Binding SelectedItem}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,21,0,0" Grid.Column="1" Height="16" Grid.Row="1" Width="0"/>
 
 
                 <Label Grid.Column="3" Content="Choix du Format : " HorizontalAlignment="Center" Margin="0,29,0,0" VerticalAlignment="Top" Width="102" FontSize="10"  Height="25" Grid.RowSpan="2"/>
-                <ComboBox Name="dropdownMenu1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150"
-                  SelectedIndex="0" SelectedItem="{Binding SelectedItem}" Grid.Column="3" Margin="0,29,0,0" Grid.Row="1" Height="24">
-                    <ComboBoxItem Content="XML"/>
-                    <ComboBoxItem Content="JSON"/>
+                <ComboBox ItemsSource="{Binding LogFileTypes}" Name="dropdownMenu1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150"
+                  SelectedIndex="0" SelectedItem="{Binding LogFileType}" Grid.Column="3" Margin="0,29,0,0" Grid.Row="1" Height="24">
                 </ComboBox>
                 <TextBlock Text="{Binding SelectedItem}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,21,0,0" Grid.Column="1" Height="16" Grid.Row="1" Width="0"/>
 
 
                 <Label Grid.Column="5" Content="Taille Maximal en Mo : " HorizontalAlignment="Center" Margin="0,4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="108" FontSize="10"  Height="30"/>
                 <TextBox Grid.Column="5" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" Margin="0,34,0,0" Height="18"
-         Opacity="0.5" Text="Taille_du_Fichier" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+         Opacity="0.5" Text="{Binding MaxSimultaneousFileSize}" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
 
 
                 <Label Grid.Column="5" Content="Logiciel Metier : " HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Top" Width="80" FontSize="10"  Height="24" Grid.RowSpan="2" Margin="0,11,0,0" />
                 <TextBox Grid.Column="5" HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" Margin="0,19,0,0" Height="18"
-Opacity="0.5" Text="Logiciel" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+Opacity="0.5" Text="{Binding ForbiddenSoftware}" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+                <Label Grid.Column="5" Content="Clé de chiffrement :" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Top" Width="108" FontSize="10"  Height="30" Margin="0,1,0,0"/>
+                <TextBox Grid.Column="4" HorizontalAlignment="Left" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" Height="18"
+                    Opacity="0.5" Text="{Binding EncryptionKey}" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" Margin="31,26,0,0" Grid.ColumnSpan="2"/>
 
             </Grid>
         </DockPanel>
