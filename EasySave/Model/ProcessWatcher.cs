@@ -64,8 +64,15 @@ namespace Model
         //Method used to verify if at least one of the processes running has the looked for name.
         private bool IsProcessRunning()
         {
-            Process[] processes = Process.GetProcessesByName(Constants.Settings.ForbiddenSoftware);
-            return processes.Length > 0 && !processes[0].HasExited;
+            if (Constants.Settings.ForbiddenSoftware != "")
+            {
+                Process[] processes = Process.GetProcessesByName(Constants.Settings.ForbiddenSoftware);
+                return processes.Length > 0 && !processes[0].HasExited;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         //Method used to trigger the "ProcessStarted" event

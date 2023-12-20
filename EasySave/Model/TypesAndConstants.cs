@@ -95,11 +95,13 @@ namespace Model
         [JsonInclude]
         public List<string> EncryptedExtensions = new List<string>();
         [JsonInclude]
-        public string ForbiddenSoftware = "notepad";
+        public string ForbiddenSoftware = "";
         [JsonInclude]
-        public long MaxSimultaneousFileSize = 40000;
+        public long MaxSimultaneousFileSize = 40000; //Default value:40000
         [JsonInclude]
-        public List<string> PrioritizedExtensions = [".jpg"];
+        public List<string> PrioritizedExtensions = new List<string>();
+        [JsonInclude]
+        public string EncryptionKey = "DEFAULT"; //Default key:DEFAULT
         public bool LoadSettings()
         //Function used to load the settings stored in the settings file.
         //Returns true if a file existed and was loaded, otherwise, false.
@@ -110,7 +112,7 @@ namespace Model
                 try
                 {
                     Settings Loaded = JsonSerializer.Deserialize<Settings>(System.IO.File.ReadAllText(Constants.SettingsFile))!;
-                    this.Language=Loaded.Language;this.LogFileType=Loaded.LogFileType; this.EncryptedExtensions=Loaded.EncryptedExtensions;
+                    this.Language=Loaded.Language;this.LogFileType=Loaded.LogFileType; this.EncryptedExtensions=Loaded.EncryptedExtensions;this.ForbiddenSoftware=Loaded.ForbiddenSoftware;this.MaxSimultaneousFileSize = Loaded.MaxSimultaneousFileSize;this.PrioritizedExtensions = Loaded.PrioritizedExtensions;this.EncryptionKey=Loaded.EncryptionKey;
                     return true;
                 }
                 catch
