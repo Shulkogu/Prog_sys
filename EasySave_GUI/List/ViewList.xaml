@@ -41,22 +41,22 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Margin="0,30,0,0">
                 <Label> Name </Label>
-                <TextBox Text="{Binding SelectedBackup.Name, UpdateSourceTrigger=PropertyChanged}" Margin="12 0 12 12"/>
+                <TextBox x:Name="nameText" Text="{Binding SelectedBackup.Name, UpdateSourceTrigger=PropertyChanged}" Margin="12 0 12 12"/>
             </StackPanel>
             <StackPanel Grid.Column="1" Margin="0,30,0,0">
                 <TextBox IsReadOnly="True" x:Name="SourceText" Text="{Binding SelectedBackup.Source, UpdateSourceTrigger=PropertyChanged}" Margin="12 0 12 12"/>
-                <Button Margin="12,0,12,12" Width="45" Height="20" Content="Source" Style="{StaticResource RoundedButton}" Command="{Binding SourceCommand, UpdateSourceTrigger=PropertyChanged}" ></Button>
+                <Button Margin="12,0,12,12" Width="45" Height="20" Content="Source" Style="{StaticResource RoundedButton}" Command="{Binding SourceCommand, UpdateSourceTrigger=PropertyChanged}" Click="Button_Click" ></Button>
             </StackPanel>
             <StackPanel Grid.Column="2" Margin="0,30,0,0">
                 <TextBox IsReadOnly="True" x:Name="TargetText" Text="{Binding SelectedBackup.Target}" Margin="12 0 12 12"/>
-                <Button Margin="12,0,12,12" Width="45" Height="20" Content="Target" Style="{StaticResource RoundedButton}" Command="{Binding TargetCommand}"></Button>
+                <Button Margin="12,0,12,12" Width="45" Height="20" Content="Target" Style="{StaticResource RoundedButton}" Command="{Binding TargetCommand}" Click="Button_Click_1"></Button>
             </StackPanel>
             <StackPanel Grid.Column="3" Margin="0,30,0,0">
                 <StackPanel.Resources>
                     <easySaveGui:SaveType x:Key="typesave"/>
                 </StackPanel.Resources>
                 <Label>Type of save</Label>
-                <ComboBox ItemsSource="{StaticResource typesave}" IsEditable="true" IsReadOnly="true">
+                <ComboBox x:Name="sauvegarde" ItemsSource="{StaticResource typesave}" IsEditable="true" IsReadOnly="true">
                     <ComboBox.Text>
                         Type of save
                     </ComboBox.Text>
@@ -69,20 +69,20 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" x:Name="addBtn" Command="{Binding AddCommand}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="#5BB450" Content="Add"></Button>
-                    <Button Grid.Column="1" x:Name="deleteBtn" Command="{Binding RemoveCommand}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="#ED4437" Content="Delete"></Button>
+                    <Button Grid.Column="1" x:Name="deleteBtn" Command="{Binding RemoveCommand}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="#ED4437" Content="Delete" Click="deleteBtn_Click"></Button>
                 </Grid>
-                <Button x:Name="sendBtn" Command="{Binding SendCommand}" Margin="12,0,12,12" Style="{StaticResource RoundedButton}" Content="Send" Height="20" Width="100"></Button>
+                <Button x:Name="sendBtn" Command="{Binding SendCommand}" Margin="12,0,12,12" Style="{StaticResource RoundedButton}" Content="Modify" Background="Yellow" Height="20" Width="100" Click="SendBtn_Click_1"></Button>
             </StackPanel>
         </Grid>
             <!-- ListView avec style GridView pour afficher la liste -->
             <ListView Grid.Row="1" x:Name="ItemListView" Background="#EDEBD7">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Propriete3}"/>
-                        <GridViewColumn Header="Sauvegarde" DisplayMemberBinding="{Binding Propriete1}"/>
-                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Propriete2}"/>
-                        <GridViewColumn Header="Taille" DisplayMemberBinding="{Binding Propriete4}"/>
-                        <GridViewColumn Header="Chemin" DisplayMemberBinding="{Binding Propriete5}"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Nom}"/>
+                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Source}"/>
+                    <GridViewColumn Header="Target" DisplayMemberBinding="{Binding Cible}"/>
+                    <GridViewColumn Header="Type of Save" DisplayMemberBinding="{Binding TypeDeSauvegarde}"/>
+                        <!--<GridViewColumn Header="Chemin" DisplayMemberBinding="{Binding Propriete5}"/>-->
                     </GridView>
                 </ListView.View>
             </ListView>
