@@ -10,7 +10,6 @@ namespace EasySave_GUI.SettingsView;
 
     public partial class ViewSettings : UserControl
     {
-        public string SelectedItem { get; set; }
         public ViewSettings()
         {
             InitializeComponent();
@@ -26,50 +25,6 @@ namespace EasySave_GUI.SettingsView;
                 RoutedEvent = UIElement.MouseWheelEvent,
                 Source = listBox
             });
-        }
-
-        public class RelayCommand : ICommand
-        {
-            private readonly Action _execute;
-
-            public RelayCommand(Action execute)
-            {
-                _execute = execute;
-            }
-
-            public bool CanExecute(object parameter)
-            {
-                return true;
-            }
-
-            public void Execute(object parameter)
-            {
-                _execute();
-            }
-
-            public event EventHandler CanExecuteChanged;
-        }
-
-        public class RelayCommand<T> : ICommand
-        {
-            private readonly Action<T> _execute;
-
-            public RelayCommand(Action<T> execute)
-            {
-                _execute = execute;
-            }
-
-            public bool CanExecute(object parameter)
-            {
-                return true;
-            }
-
-            public void Execute(object parameter)
-            {
-                _execute((T)parameter);
-            }
-
-            public event EventHandler CanExecuteChanged;
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)

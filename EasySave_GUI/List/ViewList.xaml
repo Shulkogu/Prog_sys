@@ -41,25 +41,19 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Margin="0,30,0,0">
                 <Label> Name </Label>
-                <TextBox x:Name="nameText" Text="{Binding SelectedBackup.Name, UpdateSourceTrigger=PropertyChanged}" Margin="12 0 12 12"/>
+                <TextBox x:Name="nameText" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="12 0 12 12"/>
             </StackPanel>
             <StackPanel Grid.Column="1" Margin="0,30,0,0">
-                <TextBox IsReadOnly="True" x:Name="SourceText" Text="{Binding SelectedBackup.Source, UpdateSourceTrigger=PropertyChanged}" Margin="12 0 12 12"/>
-                <Button Margin="12,0,12,12" Width="45" Height="20" Content="Source" Style="{StaticResource RoundedButton}" Command="{Binding SourceCommand, UpdateSourceTrigger=PropertyChanged}" Click="Button_Click" ></Button>
+                <TextBox IsReadOnly="True" x:Name="SourceText" Text="{Binding Source, UpdateSourceTrigger=PropertyChanged}" Margin="12 0 12 12"/>
+                <Button Margin="12,0,12,12" Width="45" Height="20" Content="Source" Style="{StaticResource RoundedButton}" Command="{Binding SetSourcePath, UpdateSourceTrigger=PropertyChanged}"></Button>
             </StackPanel>
             <StackPanel Grid.Column="2" Margin="0,30,0,0">
-                <TextBox IsReadOnly="True" x:Name="TargetText" Text="{Binding SelectedBackup.Target}" Margin="12 0 12 12"/>
-                <Button Margin="12,0,12,12" Width="45" Height="20" Content="Target" Style="{StaticResource RoundedButton}" Command="{Binding TargetCommand}" Click="Button_Click_1"></Button>
+                <TextBox IsReadOnly="True" x:Name="TargetText" Text="{Binding Target}" Margin="12 0 12 12"/>
+                <Button Margin="12,0,12,12" Width="45" Height="20" Content="Target" Style="{StaticResource RoundedButton}" Command="{Binding SetTargetPath}"></Button>
             </StackPanel>
             <StackPanel Grid.Column="3" Margin="0,30,0,0">
-                <StackPanel.Resources>
-                    <easySaveGui:SaveType x:Key="typesave"/>
-                </StackPanel.Resources>
                 <Label>Type of save</Label>
-                <ComboBox x:Name="sauvegarde" ItemsSource="{StaticResource typesave}" IsEditable="true" IsReadOnly="true">
-                    <ComboBox.Text>
-                        Type of save
-                    </ComboBox.Text>
+                <ComboBox x:Name="sauvegarde" ItemsSource="{Binding SaveTypes}" IsEditable="true" IsReadOnly="true" SelectedItem="{Binding SaveType}">
                 </ComboBox>                
             </StackPanel>
             <StackPanel Grid.Column="4" Margin="0,30,0,0">
@@ -68,21 +62,20 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" x:Name="addBtn" Command="{Binding AddCommand}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="#5BB450" Content="Add"></Button>
-                    <Button Grid.Column="1" x:Name="deleteBtn" Command="{Binding RemoveCommand}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="#ED4437" Content="Delete" Click="deleteBtn_Click"></Button>
+                    <Button Grid.Column="0" x:Name="addBtn" Command="{Binding AddJob}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="#5BB450" Content="Add"></Button>
+                    <Button Grid.Column="1" x:Name="deleteBtn" Command="{Binding DeleteJob}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="#ED4437" Content="Delete"></Button>
                 </Grid>
-                <Button x:Name="sendBtn" Command="{Binding SendCommand}" Margin="12,0,12,12" Style="{StaticResource RoundedButton}" Content="Modify" Background="Yellow" Height="20" Width="100" Click="SendBtn_Click_1"></Button>
+                <Button x:Name="sendBtn" Command="{Binding ModifyJob}" Margin="12,0,12,12" Style="{StaticResource RoundedButton}" Content="Modify" Background="Yellow" Height="20" Width="100" ></Button>
             </StackPanel>
         </Grid>
             <!-- ListView avec style GridView pour afficher la liste -->
-            <ListView Grid.Row="1" x:Name="ItemListView" Background="#EDEBD7">
+        <ListView Grid.Row="1" x:Name="ItemListView" Background="#EDEBD7" ItemsSource="{Binding ItemListView}" SelectionMode="Extended" SelectionChanged="ItemListView_SelectionChanged">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Nom}"/>
-                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Source}"/>
-                    <GridViewColumn Header="Target" DisplayMemberBinding="{Binding Cible}"/>
-                    <GridViewColumn Header="Type of Save" DisplayMemberBinding="{Binding TypeDeSauvegarde}"/>
-                        <!--<GridViewColumn Header="Chemin" DisplayMemberBinding="{Binding Propriete5}"/>-->
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Source" DisplayMemberBinding="{Binding SourcePath}"/>
+                        <GridViewColumn Header="Target" DisplayMemberBinding="{Binding TargetPath}"/>
+                        <GridViewColumn Header="Type of Save" DisplayMemberBinding="{Binding SaveType}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

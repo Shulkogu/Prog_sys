@@ -8,46 +8,34 @@ namespace Model
 {
     internal class JobSaver
     {
-        public static void SaveJob(Job job, string jobsFilePath)
+        public static void SaveJob(Job job)
         {
-            List<Job> existingJobs = LoadExistingJobs(jobsFilePath);
-            VerifyJobCount(existingJobs);
+            List<Job> existingJobs = LoadExistingJobs();
             existingJobs.Add(job);
-            SaveJobs(existingJobs, jobsFilePath);
+            SaveJobs(existingJobs);
         }
 
-        public static List<Job> LoadExistingJobs(string jobsFilePath)
+        public static List<Job> LoadExistingJobs()
         {
             List<Job> existingJobs = new List<Job>();
 
-            if (System.IO.File.Exists(jobsFilePath))
+            if (System.IO.File.Exists(Constants.JobsFile))
             {
-                string json = System.IO.File.ReadAllText(jobsFilePath);
+                string json = System.IO.File.ReadAllText(Constants.JobsFile);
                 existingJobs = System.Text.Json.JsonSerializer.Deserialize<List<Job>>(json) ?? new List<Job>();
             }
 
             return existingJobs;
         }
 
-        public static bool VerifyJobCount(List<Job> jobs)
-        {
-            const int maxJobAmount = 5;
-
-            if (jobs.Count >= maxJobAmount)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public static bool DeleteAllJobsByName(List<Job> jobs, string nom, string jobsFilePath)
+        public static bool DeleteAllJobsByName(List<Job> jobs, string nom)
         {
             List<Job> jobsToDelete = jobs.Where(t => t.Name == nom).ToList();
 
             if (jobsToDelete.Any())
             {
                 jobs.RemoveAll(t => t.Name == nom);
-                SaveJobs(jobs, jobsFilePath);
+                SaveJobs(jobs);
                 return true;
             }
             else
@@ -56,10 +44,10 @@ namespace Model
             }
         }
 
-        public static void SaveJobs(List<Job> jobs, string jobsFilePath)
+        public static void SaveJobs(List<Job> jobs)
         {
             string json = System.Text.Json.JsonSerializer.Serialize(jobs, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            System.IO.File.WriteAllText(jobsFilePath, json);
+            System.IO.File.WriteAllText(Constants.JobsFile, json);
         }
     }
 }
