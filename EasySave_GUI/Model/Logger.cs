@@ -13,10 +13,11 @@ namespace Model
 {
     internal class Logger
     {
+        public event EventHandler StatesUpdated;
         private string LogPath;
         private bool LogInitiated = false;
         private string StatePath;
-        private Dictionary<string, Savestate> SaveStates;
+        public Dictionary<string, Savestate> SaveStates;
         public object Locker = new object();
         public Logger(string LogPath, string StatePath)
         //Method that initializes the logger and create the JSON file that will be used to log the copied files
@@ -140,6 +141,7 @@ namespace Model
                         StateContent = StateContent.Remove(StateContent.Length - 1, 1) + Constants.GetLoggerFooter();
                     }
                     System.IO.File.WriteAllText(StatePath, StateContent);
+                    StatesUpdated?.Invoke(this, EventArgs.Empty);
                 }
             }
         }

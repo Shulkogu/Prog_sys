@@ -75,8 +75,8 @@
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
                         <GridViewColumn Header="Source" DisplayMemberBinding="{Binding SourcePath}"/>
                         <GridViewColumn Header="Target" DisplayMemberBinding="{Binding TargetPath}"/>
-                        <GridViewColumn Header="Type of Save" DisplayMemberBinding="{Binding SaveType}"/>
-                    </GridView>
+                    <GridViewColumn Header="Type of Save" DisplayMemberBinding="{Binding SaveType}"/>
+                </GridView>
                 </ListView.View>
             </ListView>
     </Grid>

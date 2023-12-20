@@ -55,22 +55,29 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" x:Name="pauseBtn" Command="{Binding AddCommand}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="Yellow" Content="Pause"></Button>
-                    <Button Grid.Column="1" x:Name="stopBtn" Command="{Binding RemoveCommand}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="#ED4437" Content="Stop"></Button>
+                    <Button Grid.Column="0" x:Name="pauseBtn" Command="{Binding PauseJobs}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="Yellow" Content="Pause"></Button>
+                    <Button Grid.Column="1" x:Name="stopBtn" Command="{Binding StopJobs}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="#ED4437" Content="Stop"></Button>
                 </Grid>
-                <Button x:Name="startBtn" Command="{Binding SendCommand}" Margin="12,0,12,12" Style="{StaticResource RoundedButton}" Content="Start" Height="20" Width="100" Background="#5BB450"></Button>
+                <Button x:Name="startBtn" Command="{Binding StartJobs}" Margin="12,0,12,12" Style="{StaticResource RoundedButton}" Content="Start/Resume" Height="20" Width="100" Background="#5BB450"></Button>
             </StackPanel>
         </Grid>
             <!-- ListView avec style GridView pour afficher la liste -->
-            <ListView Grid.Row="1" x:Name="ItemListView" Background="#EDEBD7">
+        <ListView Grid.Row="1" x:Name="Savestates" ItemsSource="{Binding Savestates}" Background="#EDEBD7" SelectionMode="Extended" SelectionChanged="Savestates_SelectionChanged">
                 <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Propriete3}"/>
-                        <GridViewColumn Header="Sauvegarde" DisplayMemberBinding="{Binding Propriete1}"/>
-                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Propriete2}"/>
-                        <GridViewColumn Header="Taille" DisplayMemberBinding="{Binding Propriete4}"/>
-                        <GridViewColumn Header="Chemin" DisplayMemberBinding="{Binding Propriete5}"/>
-                    </GridView>
+                <GridView>
+                    <GridViewColumn Header="Sauvegarde" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding State}" />
+                    <GridViewColumn Header="Progresion">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ProgressBar Value="{Binding CurrentFile}" Maximum="{Binding TotalFilesToCopy}" Height="20" Width="200"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Fichier source" DisplayMemberBinding="{Binding SourceFilePath}"/>
+                    <GridViewColumn Header="Fichier destination" DisplayMemberBinding="{Binding TargetFilePath}"/>
+                    <GridViewColumn Header="Taille totale" DisplayMemberBinding="{Binding TotalFilesSize}"/>
+                </GridView>
                 </ListView.View>
             </ListView>
     </Grid>

@@ -145,13 +145,13 @@ namespace Model
     public class Savestate
     {
         //Last state of a job that is being/has been executed
-        public string? Name;
-        public string? SourceFilePath;
-        public string? TargetFilePath;
-        public Workstate State;
-        public double TotalFilesToCopy;
-        public double TotalFilesSize;
-        public double CurrentFile;
+        public string Name { get; }
+        public string? SourceFilePath { get; set; }
+        public string? TargetFilePath { get; set; }
+        public Workstate State { get; set; }
+        public double TotalFilesToCopy { get; set; }
+        public double TotalFilesSize { get; set; }
+        public double CurrentFile { get; set; }
         public Savestate(string Name, double TotalFilesToCopy, double TotalFilesSize)
         {
             this.Name = Name; this.TotalFilesToCopy = TotalFilesToCopy; this.TotalFilesSize = TotalFilesSize;
