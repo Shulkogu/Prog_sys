@@ -1,13 +1,13 @@
-﻿<Window x:Class="EasySave_GUI.HomeWindow"
+﻿<Window x:Class="EasySave_GUI.HomeView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasySave_GUI"
-        xmlns:listView="clr-namespace:EasySave_GUI.ListView"
-        xmlns:logsView="clr-namespace:EasySave_GUI.LogsView"
-        xmlns:saveView="clr-namespace:EasySave_GUI.SaveView"
-        xmlns:settingsView="clr-namespace:EasySave_GUI.SettingsView"
+        xmlns:joblistView="clr-namespace:EasySave_GUI.JobList"
+        xmlns:logsView="clr-namespace:EasySave_GUI.Logs"
+        xmlns:jobcontrolView="clr-namespace:EasySave_GUI.JobControl"
+        xmlns:settingsView="clr-namespace:EasySave_GUI.Settings"
         Closing="GUI_Closed"
         
         mc:Ignorable="d"
@@ -104,7 +104,7 @@
                         <Image Source="{DynamicResource DynamicHome}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,5,5,5"/>
                     </StackPanel>
                 </TabItem.Header>
-                <listView:ViewList/>
+                <joblistView:JobListView/>
             </TabItem>
             
             <TabItem>
@@ -113,7 +113,7 @@
                         <Image Source="{DynamicResource DynamicSave}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,5,5,5"/>
                     </StackPanel>
                 </TabItem.Header>
-                <saveView:UserControlSave/>
+                <jobcontrolView:JobControlView/>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -121,7 +121,7 @@
                         <Image Source="{DynamicResource DynamicLogs}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,5,5,5"/>
                     </StackPanel>
                 </TabItem.Header>
-                <logsView:ViewLogs/>
+                <logsView:LogsView/>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -129,7 +129,7 @@
                         <Image Source="{DynamicResource DynamicSettings}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,5,5,5"/>
                     </StackPanel>
                 </TabItem.Header>
-                <settingsView:ViewSettings/>
+                <settingsView:SettingsView/>
             </TabItem>
         </TabControl>
     </Grid>

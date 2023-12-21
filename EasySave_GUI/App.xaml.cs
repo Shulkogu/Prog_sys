@@ -26,9 +26,9 @@ public partial class App : Application
         }
         else
         {
-            HomeWindow homeWindow = new HomeWindow();
-            homeWindow.SwitchLanguage(Model.Constants.Settings.Language.Value);
-            homeWindow.Show();
+            HomeView homeView = new HomeView();
+            homeView.SwitchLanguage(Model.Constants.Settings.Language.Value);
+            homeView.Show();
         }
     }
 }

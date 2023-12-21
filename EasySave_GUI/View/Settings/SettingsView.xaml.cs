@@ -4,16 +4,16 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using EasySave_GUI.SettingsViewModel;
+using EasySave_GUI.Settings;
 
-namespace EasySave_GUI.SettingsView;
+namespace EasySave_GUI.Settings;
 
-    public partial class ViewSettings : UserControl
+    public partial class SettingsView : UserControl
     {
-        public ViewSettings()
+        public SettingsView()
         {
             InitializeComponent();
-            DataContext = new EasySave_GUI.SettingsViewModel.SettingsViewModel();
+            DataContext = new SettingsViewModel();
         }
 
         private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

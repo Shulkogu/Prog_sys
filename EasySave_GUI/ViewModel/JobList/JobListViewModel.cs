@@ -6,11 +6,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using static EasySave_GUI.ListView.ViewList;
 
-namespace EasySave_GUI.ListViewModel
+namespace EasySave_GUI.JobList
 {
-    internal class ViewListViewModel : INotifyPropertyChanged
+    internal class JobListViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         public ICommand SetSourcePath { get; set; }
@@ -18,7 +17,7 @@ namespace EasySave_GUI.ListViewModel
         public ICommand AddJob { get; set; }
         public ICommand DeleteJob { get; set; }
         public ICommand ModifyJob { get; set; }
-        public ViewListViewModel()
+        public JobListViewModel()
         {
             SetSourcePath = new RelayCommand(AskSourcePath);
             SetTargetPath = new RelayCommand(AskTargetPath);

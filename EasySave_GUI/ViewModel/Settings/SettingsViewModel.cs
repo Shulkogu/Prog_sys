@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using static EasySave_GUI.SettingsView.ViewSettings;
+using static EasySave_GUI.Settings.SettingsView;
 
-namespace EasySave_GUI.SettingsViewModel
+namespace EasySave_GUI.Settings
 {
     internal class SettingsViewModel : INotifyPropertyChanged
     {

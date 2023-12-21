@@ -1,5 +1,4 @@
-﻿using EasySave_GUI.ListViewModel;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -8,19 +7,19 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace EasySave_GUI.ListView
+namespace EasySave_GUI.JobList
 {
-    public partial class ViewList : UserControl
+    public partial class JobListView : UserControl
     {
-        public ViewList()
+        public JobListView()
         {
             InitializeComponent();
-            DataContext = new EasySave_GUI.ListViewModel.ViewListViewModel();
+            DataContext = new JobListViewModel();
         }
         private void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         //Function used to update the ViewModel's list of jobs selected by the user
         {
-            var viewmodel = (ViewListViewModel)DataContext;
+            var viewmodel = (JobListViewModel)DataContext;
             viewmodel.SelectedJobs = ItemListView.SelectedItems.Cast<Model.Job>().ToList();
             viewmodel.SelectionChanged();
         }

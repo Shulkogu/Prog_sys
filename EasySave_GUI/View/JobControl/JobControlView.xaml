@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="EasySave_GUI.SaveView.UserControlSave"
+﻿<UserControl x:Class="EasySave_GUI.JobControl.JobControlView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:EasySave_GUI.ListView"
+             xmlns:local="clr-namespace:EasySave_GUI.JobControl"
              mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="RoundedButton" TargetType="Button">

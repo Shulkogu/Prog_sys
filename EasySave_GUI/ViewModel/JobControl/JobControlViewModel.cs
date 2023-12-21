@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace EasySave_GUI.UserControlViewModel
+namespace EasySave_GUI.JobControl
 {
-    internal class UserControlViewModel : INotifyPropertyChanged
+    internal class JobControlViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private JobOrchestrator JobOrchestrator = new JobOrchestrator();
@@ -41,7 +41,7 @@ namespace EasySave_GUI.UserControlViewModel
             }
         }
         public List<Model.Savestate> SelectedJobs { get; set; }
-        public UserControlViewModel()
+        public JobControlViewModel()
         {
             JobOrchestrator.StatesUpdated += StatesUpdatedEvent;
             JobSaver.JobsUpdated += StatesUpdatedEvent;

@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="EasySave_GUI.SettingsView.ViewSettings"
+﻿<UserControl x:Class="EasySave_GUI.Settings.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:EasySave_GUI.SettingsView"
+             xmlns:local="clr-namespace:EasySave_GUI.Settings"
              mc:Ignorable="d" d:DesignHeight="306.333" d:DesignWidth="589.733">
 
     <Grid Background="white" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">

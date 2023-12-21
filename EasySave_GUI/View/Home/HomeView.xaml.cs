@@ -11,16 +11,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using EasySave_GUI.ListView;
+using EasySave_GUI.JobList;
 
 namespace EasySave_GUI;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class HomeWindow : Window
+public partial class HomeView : Window
 {
-    public HomeWindow()
+    public HomeView()
     {
         InitializeComponent();
     }
