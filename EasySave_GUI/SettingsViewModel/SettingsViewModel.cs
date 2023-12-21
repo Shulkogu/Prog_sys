@@ -48,7 +48,7 @@ namespace EasySave_GUI.SettingsViewModel
                 }
             }
         }
-        public View.Language Language
+        public Model.Language Language
         {
             get { return Model.Constants.Settings.Language.Value; }
             set {
@@ -59,7 +59,7 @@ namespace EasySave_GUI.SettingsViewModel
                 }
             }
         }
-        public List<View.Language> Languages { get; } = Enum.GetValues(typeof(View.Language)).Cast<View.Language>().ToList();
+        public List<Model.Language> Languages { get; } = Enum.GetValues(typeof(Model.Language)).Cast<Model.Language>().ToList();
         public Model.LogFileType LogFileType
         {
             get { return Model.Constants.Settings.LogFileType.Value; }

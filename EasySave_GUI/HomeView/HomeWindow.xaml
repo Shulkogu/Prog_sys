@@ -74,14 +74,14 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Ajoutez vos éléments pour la première colonne du tableau ici -->
-                <Button x:Name="FrenchButton" BorderBrush="Transparent" HorizontalAlignment="Center" Height="39" Margin="10,25,0,0" VerticalAlignment="Top" Width="39">
+                <Button x:Name="FrenchButton" Click="btnFrench_Click" BorderBrush="Transparent" HorizontalAlignment="Center" Height="39" Margin="10,25,0,0" VerticalAlignment="Top" Width="39">
                     <Button.Background>
                         <ImageBrush ImageSource="{DynamicResource DynamicFrenchFlag}"/>
                     </Button.Background>
                 </Button>
 
                 <!-- Ajoutez vos éléments pour la deuxième colonne du tableau ici -->
-                <Button Grid.Column="1" x:Name="EnglishButton" BorderBrush="Transparent" HorizontalAlignment="Center" Height="39" Margin="10,25,0,0" VerticalAlignment="Top" Width="39">
+                <Button Grid.Column="1" x:Name="EnglishButton" Click="btnEnglish_Click" BorderBrush="Transparent" HorizontalAlignment="Center" Height="39" Margin="10,25,0,0" VerticalAlignment="Top" Width="39">
                     <Button.Background>
                         <ImageBrush ImageSource="{DynamicResource DynamicEnglishFlag}"/>
                     </Button.Background>

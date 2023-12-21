@@ -21,24 +21,28 @@ public partial class HomeWindow : Window
     public HomeWindow()
     {
         InitializeComponent();
-        
-        var FrenchImage = new BitmapImage(new Uri("pack://application:,,,/EasySave_GUI;component/icon/france.png"));
-        Resources["MyDynamicImage"] = FrenchImage;
-        var EnglishImage = new BitmapImage(new Uri("pack://application:,,,/EasySave_GUI;component/icon/royaume-uni.png"));
-        Resources["MyDynamicImage"] = EnglishImage;
-        var IconIcon = new BitmapImage(new Uri("pack://application:,,,/EasySave_GUI;component/icon/36020.ico"));
-        Resources["MyDynamicImage"] = IconIcon;
-        var HomeImage = new BitmapImage(new Uri("pack://application:,,,/EasySave_GUI;component/icon/accueil.png"));
-        Resources["MyDynamicImage"] = HomeImage;
-        var SaveImage = new BitmapImage(new Uri("pack://application:,,,/EasySave_GUI;component/icon/disquette.png"));
-        Resources["MyDynamicImage"] = SaveImage;
-        var LogsImage = new BitmapImage(new Uri("pack://application:,,,/EasySave_GUI;component/icon/un-journal.png"));
-        Resources["MyDynamicImage"] = LogsImage;
-        var SettingsImage = new BitmapImage(new Uri("pack://application:,,,/EasySave_GUI;component/icon/parametres.png"));
-        Resources["MyDynamicImage"] = SettingsImage;
-        var CreateImage = new BitmapImage(new Uri("pack://application:,,,/EasySave_GUI;component/icon/creer.png"));
-        Resources["MyDynamicImage"] = CreateImage;
-        var ModifyImage = new BitmapImage(new Uri("pack://application:,,,/EasySave_GUI;component/icon/bouton-modifier.png"));
-        Resources["MyDynamicImage"] = ModifyImage;
+    }
+    private void btnEnglish_Click(object sender, RoutedEventArgs e)
+    {
+        SwitchLanguage(Model.Language.English);
+    }
+    private void btnFrench_Click(object sender, RoutedEventArgs e)
+    {
+        SwitchLanguage(Model.Language.French);
+    }
+    
+    public void SwitchLanguage(Model.Language language)
+    {
+        ResourceDictionary dictionary = new ResourceDictionary();
+        switch (language)
+        {
+            case Model.Language.French:
+                dictionary.Source = new Uri("Languages/StringResources.fr.xaml", UriKind.Relative);
+                break;
+            default:
+                dictionary.Source = new Uri("Languages/StringResources.en.xaml", UriKind.Relative);
+                break;
+        }
+        this.Resources.MergedDictionaries.Add(dictionary);
     }
 }

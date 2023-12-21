@@ -14,6 +14,12 @@
         <XamlRuntime>Wpf</XamlRuntime>
         <SubType>Designer</SubType>
       </Page>
+      <Page Update="Languages\StringResources.en.xaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Page>
+      <Page Update="Languages\StringResources.fr.xaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Page>
     </ItemGroup>
 
     <ItemGroup>
