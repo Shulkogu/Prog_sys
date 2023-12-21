@@ -13,8 +13,17 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        HomeWindow homeWindow = new HomeWindow();
-        homeWindow.SwitchLanguage(Model.Constants.Settings.Language.Value);
-        homeWindow.Show();
+        if (e.Args.Length == 2 && e.Args[0] == "-e")
+        {
+            JobOrchestrator JobOrchestrator = new JobOrchestrator();
+            JobSaver JobSaver = new JobSaver();
+            JobOrchestrator.ExecuteJobs(JobOrchestrator.GetJobsByCriteria(e.Args[1], JobSaver.LoadExistingJobs()));
+        }
+        else
+        {
+            HomeWindow homeWindow = new HomeWindow();
+            homeWindow.SwitchLanguage(Model.Constants.Settings.Language.Value);
+            homeWindow.Show();
+        }
     }
 }
