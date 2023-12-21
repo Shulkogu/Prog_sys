@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using View;
 
-namespace ViewModel
+namespace Model
 {
     internal class JobOrchestrator
     {
@@ -151,30 +151,56 @@ namespace ViewModel
                     {
                         NotPrioritizedTask.Item1.Workstate = Workstate.ACTIVE;
                         NotPrioritizedTask.Item1.ManualResetEvent.Set();
-                        Logger.ResumeState(NotPrioritizedTask.Item1.Job.Name, Workstate.ACTIVE);
+                        Logger.ResumeState(NotPrioritizedTask.Item1.Job.Name);
                     }
                     //Console.WriteLine($"Job : {NotPrioritizedTask.Item1.Job.Name} is resumed.");
                 }
             }
         }
+        public void StopJob(Job Job)
+        {
+            try
+            {
+                Saver saver = Tasks.Where(x => x.Item1.Job.Name == Job.Name).First().Item1;
+                if (saver != null)
+                {
+                    saver.Stopped = true;
+                }
+            }
+            catch
+            {
+            }
+        }
         public void PauseJob(Job Job)
         {
-            Saver saver = Tasks.Where(x => x.Item1.Job.Name == Job.Name).First().Item1;
-            if( saver != null)
+            try
             {
-                saver.Workstate = Workstate.PAUSED_USER;
-                saver.ManualResetEvent.Reset();
-                Logger.PauseState(saver.Job.Name, Workstate.PAUSED_USER);
+                Saver saver = Tasks.Where(x => x.Item1.Job.Name == Job.Name).First().Item1;
+                if (saver != null)
+                {
+                    saver.Workstate = Workstate.PAUSED_USER;
+                    saver.ManualResetEvent.Reset();
+                    Logger.PauseState(saver.Job.Name, Workstate.PAUSED_USER);
+                }
+            }
+            catch
+            {
             }
         }
         public void ResumeJob(Job Job)
         {
-            Saver saver = Tasks.Where(x => x.Item1.Job.Name == Job.Name).First().Item1;
-            if (saver != null && !this.ForbiddenProcessRunning && saver.Workstate == Workstate.PAUSED_USER)
+            try
             {
-                saver.Workstate = Workstate.ACTIVE;
-                saver.ManualResetEvent.Set();
-                Logger.ResumeState(saver.Job.Name, Workstate.ACTIVE);
+                Saver saver = Tasks.Where(x => x.Item1.Job.Name == Job.Name).First().Item1;
+                if (saver != null && !this.ForbiddenProcessRunning && saver.Workstate == Workstate.PAUSED_USER)
+                {
+                    saver.Workstate = Workstate.ACTIVE;
+                    saver.ManualResetEvent.Set();
+                    Logger.ResumeState(saver.Job.Name);
+                }
+            }
+            catch
+            {
             }
         }
         private void ProcessStartedEventHandler(object sender, EventArgs e)
@@ -186,7 +212,6 @@ namespace ViewModel
                 NotPrioritizedTasks.Item1.ManualResetEvent.Reset();
                 Logger.PauseState(NotPrioritizedTasks.Item1.Job.Name, Workstate.PAUSED_FORBIDDENSOFTWARE);
             }
-
         }
         private void ProcessExitedEventHandler(object sender, EventArgs e)
         {
@@ -195,7 +220,7 @@ namespace ViewModel
             {
                 NotPrioritizedTasks.Item1.Workstate = Workstate.ACTIVE;
                 NotPrioritizedTasks.Item1.ManualResetEvent.Set();
-                Logger.ResumeState(NotPrioritizedTasks.Item1.Job.Name, Workstate.ACTIVE);
+                Logger.ResumeState(NotPrioritizedTasks.Item1.Job.Name);
             }
         }
         private void LoggerUpdatedStates(object sender, EventArgs e) 

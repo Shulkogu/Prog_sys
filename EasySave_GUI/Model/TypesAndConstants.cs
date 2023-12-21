@@ -205,7 +205,8 @@ namespace Model
         END,
         PAUSED_UNPRIORITIZED,
         PAUSED_FORBIDDENSOFTWARE,
-        PAUSED_USER
+        PAUSED_USER,
+        STOPPED
     }
     public enum LogFileType
     {

@@ -113,7 +113,7 @@ namespace Model
             }
         }
         public void UpdateState(string Name, string SourceFilePath, string TargetFilePath, Workstate State, double? CurrentFile)
-        //Method that updates the states JSON file
+        //Method that updates the states file
         {
             lock (Locker)
             {
@@ -146,7 +146,7 @@ namespace Model
             }
         }
         public void FinalizeLogs()
-        //Method that adds the final ] to the JSON log file
+        //Method that adds the final footer to the log file
         {
             lock (Locker)
             {
@@ -176,12 +176,14 @@ namespace Model
                 UpdateState(Name, "", "", workstate, null);
             }
         }
-        public void ResumeState(string Name, Workstate workstate)
+        public void ResumeState(string Name)
         {
-            if (Workstate.ACTIVE == workstate)
-            {
-                UpdateState(Name, "", "", workstate, null);
-            }
+            UpdateState(Name, "", "", Workstate.ACTIVE, null);
+        }
+        public void StoppedState(string Name)
+        {
+            UpdateState(Name, "", "", Workstate.STOPPED, null);
+            SaveStates.Remove(Name);
         }
     }
 }

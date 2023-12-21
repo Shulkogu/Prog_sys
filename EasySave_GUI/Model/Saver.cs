@@ -12,6 +12,7 @@ namespace Model
 {
     internal class Saver
     {
+        public bool Stopped = false;
         public event EventHandler PrioritizedCopyStarted;
         public event EventHandler PrioritizedCopyEnded;
         public Job Job;
@@ -78,6 +79,12 @@ namespace Model
                     foreach (string RelativePath in RelativeFilePaths.Where(x => x.Item2 == FilePriority).Select(x => x.Item1))
                     {
                         ManualResetEvent.WaitOne(); //If the saver is paused, it will wait until resumed before copying the next file
+                        if(Stopped)
+                        {
+                            PrioritizedCopyEnded?.Invoke(this, EventArgs.Empty);
+                            Logger.StoppedState(this.Job.Name);
+                            return;
+                        }
                         var Time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                         File File = new File(ref FolderName, ref this.Job, RelativePath, Constants.Settings.EncryptedExtensions.Contains(Regex.Match(RelativePath, Constants.GetExtensionRegex).Value, StringComparer.OrdinalIgnoreCase), ref ExistingSaves);
                         (double?, double) FileInfo = File.Save();
