@@ -35,11 +35,11 @@ namespace EasySave_GUI.Settings
         public event PropertyChangedEventHandler PropertyChanged;
         public long MaxSimultaneousFileSize
         {
-            get { return Model.Constants.Settings.MaxSimultaneousFileSize; }
+            get { return Model.Constants.Settings.MaxSimultaneousFileSize/1000; }
             set {
                 try
                 {
-                    Model.Constants.Settings.MaxSimultaneousFileSize = value;
+                    Model.Constants.Settings.MaxSimultaneousFileSize = value*1000;
                     OnPropertyChanged(nameof(MaxSimultaneousFileSize));
                 }
                 catch
