@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,5 +45,11 @@ public partial class HomeWindow : Window
                 break;
         }
         this.Resources.MergedDictionaries.Add(dictionary);
+    }
+    private void GUI_Closed(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        Application.Current.Shutdown();
+        Process currentProcess = Process.GetCurrentProcess();
+        currentProcess.Kill();
     }
 }

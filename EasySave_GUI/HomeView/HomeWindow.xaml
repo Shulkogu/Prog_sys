@@ -8,6 +8,7 @@
         xmlns:logsView="clr-namespace:EasySave_GUI.LogsView"
         xmlns:saveView="clr-namespace:EasySave_GUI.SaveView"
         xmlns:settingsView="clr-namespace:EasySave_GUI.SettingsView"
+        Closing="GUI_Closed"
         
         mc:Ignorable="d"
         Title="EasySave" Height="450" Width="800" Icon="{DynamicResource DynamicIcon}">

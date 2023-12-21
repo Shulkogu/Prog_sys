@@ -96,6 +96,7 @@ namespace Model
                             Saver.SaveFiles();
                         });
                         await Task.WhenAll(task);
+                        task.Dispose();
                     }
                 }
                 catch
