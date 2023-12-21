@@ -44,6 +44,7 @@ namespace EasySave_GUI.UserControlViewModel
         public UserControlViewModel()
         {
             JobOrchestrator.StatesUpdated += StatesUpdatedEvent;
+            JobSaver.JobsUpdated += StatesUpdatedEvent;
             StartJobs = new RelayCommand(StartSelectedJobs);
         }
         private void StatesUpdatedEvent(object sender, EventArgs e)
