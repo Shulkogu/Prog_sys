@@ -11,6 +11,8 @@ namespace EasySave_GUI.JobList
 {
     internal class JobListViewModel : INotifyPropertyChanged
     {
+        public event EventHandler? NameAlreadyExists;
+        public event EventHandler? EmptyFields;
         public event PropertyChangedEventHandler? PropertyChanged;
         public ICommand SetSourcePath { get; set; }
         public ICommand SetTargetPath { get; set; }
@@ -67,7 +69,7 @@ namespace EasySave_GUI.JobList
                     OnPropertyChanged(nameof(ItemListView));
                     break;
                 case 2:
-                    MessageBox.Show("Veuillez renseigner un autre nom. Ce nom existe déjà.");
+                    NameAlreadyExists?.Invoke(this, EventArgs.Empty);
                     break;
                 case 0:
                     return;
@@ -110,8 +112,8 @@ namespace EasySave_GUI.JobList
             if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Source) ||
                 string.IsNullOrWhiteSpace(Target))
             {
-                MessageBox.Show("Veuillez renseigner toutes les données.");
-                return 0; // Ne rien faire si les données sont manquantes 
+                EmptyFields?.Invoke(this, EventArgs.Empty);
+                return 0; //Do nothing if some fields aren't properly filled in
             }
             //Verify if the name is already present in the list
             if (JobSaver.LoadExistingJobs().Any(item => item.Name == Name))

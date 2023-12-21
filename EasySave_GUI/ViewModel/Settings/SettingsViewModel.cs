@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,6 +17,10 @@ namespace EasySave_GUI.Settings
 {
     internal class SettingsViewModel : INotifyPropertyChanged
     {
+        public event EventHandler WrongNumberFormat;
+        public event EventHandler KeyTooSmall;
+        public event EventHandler ExtensionAlreadyPresent;
+        public event EventHandler InvalidExtensionFormat;
         public ICommand AddEncryptedExtensionCommand { get; set; }
         public ICommand AddPrioritizedExtensionCommand { get; set; }
         public ICommand RemoveEncryptedExtensionCommand { get; set; }
@@ -39,7 +44,7 @@ namespace EasySave_GUI.Settings
                 }
                 catch
                 {
-                    MessageBox.Show("Please enter a proper number.");
+                    WrongNumberFormat?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -63,7 +68,7 @@ namespace EasySave_GUI.Settings
                 }
                 else
                 {
-                    MessageBox.Show("The key should be at least 4 characters long");
+                    KeyTooSmall?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -140,12 +145,12 @@ namespace EasySave_GUI.Settings
                     }
                     else
                     {
-                        MessageBox.Show("Extension already exists in the prioritized list.");
+                        ExtensionAlreadyPresent?.Invoke(this, EventArgs.Empty);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Invalid extension format. It should start with a dot (.)");
+                    InvalidExtensionFormat?.Invoke(this, EventArgs.Empty);
                 }
             }
             return false;

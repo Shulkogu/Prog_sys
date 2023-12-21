@@ -25,5 +25,11 @@
     <system:String x:Key="StrMaxSizeKo">Taille maximale en Ko :</system:String>
     <system:String x:Key="StrEncryptKey">Clé de chiffrement :</system:String>
     <system:String x:Key="StrSoftwareBusiness">Logiciel Métier :</system:String>
-    
+    <system:String x:Key="NameAlreadyExists">Veuillez renseigner un autre nom. Ce nom existe déjà.</system:String>
+    <system:String x:Key="EmptyFields">Veuillez renseigner toutes les données.</system:String>
+    <system:String x:Key="WrongNumberFormat">Veuillez entrer un nombre.</system:String>
+    <system:String x:Key="KeyTooSmall">La clé doit faire au moins 4 caractères</system:String>
+    <system:String x:Key="ExtensionAlreadyPresent">L'extension est déjà présente dans la liste.</system:String>
+    <system:String x:Key="InvalidExtensionFormat">Format d'extension invalide. L'extension devrait commencer par un point (.)</system:String>
+
 </ResourceDictionary>

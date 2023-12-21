@@ -4,16 +4,21 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using EasySave_GUI.JobList;
 using EasySave_GUI.Settings;
 
-namespace EasySave_GUI.Settings;
-
+namespace EasySave_GUI.Settings
+{
     public partial class SettingsView : UserControl
     {
         public SettingsView()
         {
             InitializeComponent();
             DataContext = new SettingsViewModel();
+            ((SettingsViewModel)DataContext).WrongNumberFormat += WrongNumberFormat;
+            ((SettingsViewModel)DataContext).KeyTooSmall += KeyTooSmall;
+            ((SettingsViewModel)DataContext).ExtensionAlreadyPresent += ExtensionAlreadyPresent;
+            ((SettingsViewModel)DataContext).InvalidExtensionFormat += InvalidExtensionFormat;
         }
 
         private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -47,4 +52,21 @@ namespace EasySave_GUI.Settings;
                 textBox.Opacity = 0.5;
             }
         }
+        private void WrongNumberFormat(object sender, EventArgs e)
+        {
+            MessageBox.Show((string)FindResource("WrongNumberFormat"));
+        }
+        private void KeyTooSmall(object sender, EventArgs e)
+        {
+            MessageBox.Show((string)FindResource("KeyTooSmall"));
+        }
+        private void ExtensionAlreadyPresent(object sender, EventArgs e)
+        {
+            MessageBox.Show((string)FindResource("ExtensionAlreadyPresent"));
+        }
+        private void InvalidExtensionFormat(object sender, EventArgs e)
+        {
+            MessageBox.Show((string)FindResource("InvalidExtensionFormat"));
+        }
     }
+}

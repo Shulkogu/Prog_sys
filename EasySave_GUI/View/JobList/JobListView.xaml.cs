@@ -15,6 +15,8 @@ namespace EasySave_GUI.JobList
         {
             InitializeComponent();
             DataContext = new JobListViewModel();
+            ((JobListViewModel)DataContext).NameAlreadyExists += NameAlreadyExists;
+            ((JobListViewModel)DataContext).EmptyFields += EmptyFields;
         }
         private void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         //Function used to update the ViewModel's list of jobs selected by the user
@@ -22,6 +24,14 @@ namespace EasySave_GUI.JobList
             var viewmodel = (JobListViewModel)DataContext;
             viewmodel.SelectedJobs = ItemListView.SelectedItems.Cast<Model.Job>().ToList();
             viewmodel.SelectionChanged();
+        }
+        private void NameAlreadyExists(object sender, EventArgs e)
+        {
+            MessageBox.Show((string)FindResource("NameAlreadyExists"));
+        }
+        private void EmptyFields(object sender, EventArgs e)
+        {
+            MessageBox.Show((string)FindResource("EmptyFields"));
         }
     }
 }
