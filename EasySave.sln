@@ -1,10 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasySave", "EasySave\EasySave.csproj", "{3E082BEC-1EA5-4355-9C01-7E52C6FFC8FA}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasySave_GUI", "EasySave_GUI\EasySave_GUI.csproj", "{AA7A39B3-2964-4E07-9966-F2D480AE45F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasySave_GUI", "EasySave_GUI\EasySave_GUI.csproj", "{AA7A39B3-2964-4E07-9966-F2D480AE45F8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoSoft", "CryptoSoft\CryptoSoft.csproj", "{A4A80942-8E2E-435E-ABA9-E609680AD59C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoSoft", "CryptoSoft\CryptoSoft.csproj", "{A4A80942-8E2E-435E-ABA9-E609680AD59C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3E082BEC-1EA5-4355-9C01-7E52C6FFC8FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E082BEC-1EA5-4355-9C01-7E52C6FFC8FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E082BEC-1EA5-4355-9C01-7E52C6FFC8FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E082BEC-1EA5-4355-9C01-7E52C6FFC8FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AA7A39B3-2964-4E07-9966-F2D480AE45F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AA7A39B3-2964-4E07-9966-F2D480AE45F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA7A39B3-2964-4E07-9966-F2D480AE45F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -24,5 +21,8 @@ Global
 		{A4A80942-8E2E-435E-ABA9-E609680AD59C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4A80942-8E2E-435E-ABA9-E609680AD59C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4A80942-8E2E-435E-ABA9-E609680AD59C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
