@@ -29,7 +29,7 @@
             <RowDefinition Height="100"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -37,19 +37,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" Margin="0,30,0,0">
-                <Label> Name </Label>
-                <TextBox Text="{Binding SelectedBackup.Name, UpdateSourceTrigger=PropertyChanged}" Margin="12 0 12 12"/>
-            </StackPanel>
-            <StackPanel Grid.Column="1" Margin="0,30,0,0">
-                <TextBox IsReadOnly="True" x:Name="SourceText" Text="{Binding SelectedBackup.Source, UpdateSourceTrigger=PropertyChanged}" Margin="12 0 12 12"/>
-                <TextBlock Margin="12,0,12,12" Width="45" Height="20" Text="Source" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#dcdcdc" ></TextBlock>
-            </StackPanel>
-            <StackPanel Grid.Column="2" Margin="0,30,0,0">
-                <TextBox IsReadOnly="True" x:Name="TargetText" Text="{Binding SelectedBackup.Target}" Margin="12 0 12 12"/>
-                <TextBlock Margin="12,0,12,12" Width="45" Height="20" Text="Target" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#dcdcdc" ></TextBlock>
-            </StackPanel>
-            <StackPanel Grid.Column="3" Margin="0,30,0,0">
+            <StackPanel Margin="0,30,0,0" Grid.ColumnSpan="4">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -58,27 +46,27 @@
                     <Button Grid.Column="0" x:Name="pauseBtn" Command="{Binding PauseJobs}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="Yellow" Content="Pause"></Button>
                     <Button Grid.Column="1" x:Name="stopBtn" Command="{Binding StopJobs}" Margin="12,0,12,12" Height="25" Width="50" Style="{StaticResource RoundedButton}" Background="#ED4437" Content="Stop"></Button>
                 </Grid>
-                <Button x:Name="startBtn" Command="{Binding StartJobs}" Margin="12,0,12,12" Style="{StaticResource RoundedButton}" Content="Start/Resume" Height="20" Width="100" Background="#5BB450"></Button>
+                <Button x:Name="startBtn" Command="{Binding StartJobs}" Margin="12,0,12,12" Style="{StaticResource RoundedButton}" Content="Start" Height="20" Width="100" Background="#5BB450"></Button>
             </StackPanel>
         </Grid>
-            <!-- ListView avec style GridView pour afficher la liste -->
-        <ListView Grid.Row="1" x:Name="Savestates" ItemsSource="{Binding Savestates}" Background="#EDEBD7" SelectionMode="Extended" SelectionChanged="Savestates_SelectionChanged">
-                <ListView.View>
+        <!-- ListView avec style GridView pour afficher la liste -->
+        <ListView Grid.Row="1" x:Name="ItemListView" ItemsSource="{Binding Savestates}" Background="#EDEBD7" SelectionMode="Extended" SelectionChanged="Savestates_SelectionChanged">
+            <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Sauvegarde" DisplayMemberBinding="{Binding Name}"/>
-                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding State}" />
-                    <GridViewColumn Header="Progresion">
+                    <GridViewColumn Header="{DynamicResource StrSaveName}" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="{DynamicResource StrState}" DisplayMemberBinding="{Binding State}"/>
+                    <GridViewColumn Header="Progression">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <ProgressBar Value="{Binding CurrentFile}" Maximum="{Binding TotalFilesToCopy}" Height="20" Width="200"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Fichier source" DisplayMemberBinding="{Binding SourceFilePath}"/>
-                    <GridViewColumn Header="Fichier destination" DisplayMemberBinding="{Binding TargetFilePath}"/>
-                    <GridViewColumn Header="Taille totale" DisplayMemberBinding="{Binding TotalFilesSize}"/>
+                    <GridViewColumn Header="{DynamicResource StrSource}" DisplayMemberBinding="{Binding SourceFilePath}"/>
+                    <GridViewColumn Header="{DynamicResource StrTarget}" DisplayMemberBinding="{Binding TargetFilePath}"/>
+                    <GridViewColumn Header="{DynamicResource StrSize}" DisplayMemberBinding="{Binding TotalFilesSize}"/>
                 </GridView>
-                </ListView.View>
-            </ListView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </UserControl>

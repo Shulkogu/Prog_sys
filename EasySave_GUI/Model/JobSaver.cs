@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Windows;
 
 namespace Model
 {
     internal class JobSaver
     {
-        public static void SaveJob(Job job)
+        public static event EventHandler JobsUpdated;
+        private static Lazy<JobSaver> _cache = new(() => new());
+        public static JobSaver Instance => _cache.Value;
+        public void SaveJob(Job job)
         {
             List<Job> existingJobs = LoadExistingJobs();
             existingJobs.Add(job);
             SaveJobs(existingJobs);
         }
 
-        public static List<Job> LoadExistingJobs()
+        public List<Job> LoadExistingJobs()
         {
             List<Job> existingJobs = new List<Job>();
 
@@ -28,7 +32,7 @@ namespace Model
             return existingJobs;
         }
 
-        public static bool DeleteAllJobsByName(List<Job> jobs, string nom)
+        public bool DeleteAllJobsByName(List<Job> jobs, string nom)
         {
             List<Job> jobsToDelete = jobs.Where(t => t.Name == nom).ToList();
 
@@ -44,10 +48,11 @@ namespace Model
             }
         }
 
-        public static void SaveJobs(List<Job> jobs)
+        public void SaveJobs(List<Job> jobs)
         {
             string json = System.Text.Json.JsonSerializer.Serialize(jobs, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
             System.IO.File.WriteAllText(Constants.JobsFile, json);
+            JobsUpdated?.Invoke(this, EventArgs.Empty);
         }
     }
 }

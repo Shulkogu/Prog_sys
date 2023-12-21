@@ -92,7 +92,7 @@ namespace Model
         private static Lazy<Settings> _cache = new(() => new());
         public static Settings Instance => _cache.Value;
         [JsonInclude]
-        public MutableEnum<View.Language> Language = new MutableEnum <View.Language>(View.Language.English);
+        public MutableEnum<Model.Language> Language = new MutableEnum <Model.Language>(Model.Language.English);
         [JsonInclude]
         public MutableEnum<LogFileType> LogFileType = new MutableEnum <LogFileType>(Model.LogFileType.JSON);
         [JsonInclude]
@@ -217,5 +217,10 @@ namespace Model
     {
         HIGH,
         NORMAL
+    }
+    public enum Language
+    {
+        English,
+        French
     }
 }

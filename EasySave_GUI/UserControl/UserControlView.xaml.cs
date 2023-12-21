@@ -14,6 +14,6 @@ public partial class UserControlSave : UserControl
     //Function used to update the ViewModel's list of jobs selected by the user
     {
         var viewmodel = (EasySave_GUI.UserControlViewModel.UserControlViewModel)DataContext;
-        viewmodel.SelectedJobs = Savestates.SelectedItems.Cast<Model.Savestate>().ToList();
+        viewmodel.SelectedJobs = ItemListView.SelectedItems.Cast<Model.Savestate>().ToList();
     }
 }

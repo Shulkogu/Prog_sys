@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:EasySave_GUI"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- String for ViewList:Modify -->
+    <system:String x:Key="StrSaveName">Name</system:String>
+    <system:String x:Key="StrSource">Source</system:String>
+    <system:String x:Key="StrTarget">Target</system:String>
+    <system:String x:Key="StrSaveType">Type of save</system:String>
+    <system:String x:Key="StrAdd">Add</system:String>
+    <system:String x:Key="StrDel">Delete</system:String>
+    <system:String x:Key="StrModify">Modify</system:String>
+    <system:String x:Key="StrDate">Date</system:String>
+    <system:String x:Key="StrSave">Save</system:String>
+    <system:String x:Key="StrState">Status</system:String>
+    <system:String x:Key="StrSize">Size</system:String>
+    <system:String x:Key="StrPath">Path</system:String>
+    <system:String x:Key="StrSettings">Settings</system:String>
+    <system:String x:Key="StrLangChoice">Startup Language:</system:String>
+    <system:String x:Key="StrVersionFormat">Format Version:</system:String>
+    <system:String x:Key="StrCryptExt">Encrypted Extensions:</system:String>
+    <system:String x:Key="StrPrioExt">Prioritized Extensions:</system:String>
+    <system:String x:Key="StrExtAdd">Add Extension</system:String>
+    <system:String x:Key="StrMaxSizeKo">Maximal Size (Ko):</system:String>
+    <system:String x:Key="StrEncryptKey">Encryption Key:</system:String>
+    <system:String x:Key="StrSoftwareBusiness">Forbidden Software:</system:String>
+    
+</ResourceDictionary>

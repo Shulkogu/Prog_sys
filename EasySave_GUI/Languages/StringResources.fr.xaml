@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:EasySave_GUI"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- String for ViewList:Modify -->
+    <system:String x:Key="StrSaveName">Nom</system:String>
+    <system:String x:Key="StrSource">Source</system:String>
+    <system:String x:Key="StrTarget">Destination</system:String>
+    <system:String x:Key="StrSaveType">Type de sauvegarde</system:String>
+    <system:String x:Key="StrAdd">Ajouter</system:String>
+    <system:String x:Key="StrDel">Supprimer</system:String>
+    <system:String x:Key="StrModify">Modifier</system:String>
+    <system:String x:Key="StrDate">Date</system:String>
+    <system:String x:Key="StrSave">Sauvegarde</system:String>
+    <system:String x:Key="StrState">Statut</system:String>
+    <system:String x:Key="StrSize">Taille</system:String>
+    <system:String x:Key="StrPath">Chemin</system:String>
+    <system:String x:Key="StrSettings">Paramètres</system:String>
+    <system:String x:Key="StrLangChoice">Langue de démarrage :</system:String>
+    <system:String x:Key="StrVersionFormat">Choix du Format :</system:String>
+    <system:String x:Key="StrCryptExt">Extensions à chiffrer :</system:String>
+    <system:String x:Key="StrPrioExt">Extensions prioritaires :</system:String>
+    <system:String x:Key="StrExtAdd">Ajouter une Extension</system:String>
+    <system:String x:Key="StrMaxSizeKo">Taille maximale en Ko :</system:String>
+    <system:String x:Key="StrEncryptKey">Clé de chiffrement :</system:String>
+    <system:String x:Key="StrSoftwareBusiness">Logiciel Métier :</system:String>
+    
+</ResourceDictionary>
