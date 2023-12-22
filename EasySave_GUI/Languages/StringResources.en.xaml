@@ -31,5 +31,6 @@
     <system:String x:Key="KeyTooSmall">The key should be at least 4 characters long.</system:String>
     <system:String x:Key="ExtensionAlreadyPresent">Extension already exists in the list.</system:String>
     <system:String x:Key="InvalidExtensionFormat">Invalid extension format. It should start with a dot (.)</system:String>
+    <system:String x:Key="InstanceAlreadyExecuting">An instance of the program is already running. Multiple instances can't be running at the same time.</system:String>
 
 </ResourceDictionary>

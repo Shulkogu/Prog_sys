@@ -13,6 +13,10 @@ public partial class App : Application
 {
     protected override void OnStartup(StartupEventArgs e)
     {
+        bool ExistingInstance = false;
+        new Mutex(true, AppDomain.CurrentDomain.FriendlyName, out ExistingInstance);
+        if (!ExistingInstance)
+        { MessageBox.Show((string)FindResource("InstanceAlreadyExecuting")); Application.Current.Shutdown(); return; }
         base.OnStartup(e);
 
         if (e.Args.Length == 2 && e.Args[0] == "-e")
