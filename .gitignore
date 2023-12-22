@@ -1,4 +1,4 @@
-# Editors directories
+﻿# Editors directories
 .vscode
 .vs
 .idea
@@ -136,15 +136,3 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
-
-/EasySave/obj/Release/net8.0
-/obj/Debug/net8.0/win-x64
-/.vs/EasySave/DesignTimeBuild
-/.vs/EasySave/FileContentIndex
-/.vs/EasySave/v17
-/.vs/EasySave1.0/v17
-/.vs/GitHub
-/.vs/ProjectEvaluation
-/.vs/ProjectSettings.json
-/.vs/slnx.sqlite
-/.vs/VSWorkspaceState.json

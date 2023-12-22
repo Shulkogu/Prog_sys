@@ -12,11 +12,9 @@ namespace Model
     {
         public event EventHandler StatesUpdated;
         private ProcessWatcher processWatcher = new ProcessWatcher();
-        private bool ForbiddenProcessRunning;
-        List<(Saver, Task)> Tasks = new List<(Saver, Task)>();
+        private ManualResetEvent ManualResetEvent = new ManualResetEvent(true);
         public Logger? Logger = null;
-        bool JobsExecuting = false;
-        object LockPriorityEvent = new object();
+        public bool Ready = true;
         public List<Job> GetJobsByCriteria(string criteria, List<Job> Jobs)
         {
             //Takes a list of jobs and returns the jobs whose indexes are in the criteria
@@ -73,154 +71,50 @@ namespace Model
         public async void ExecuteJobs(List<Job> Jobs)
         //This methods execute given Jobs
         {
-            if(this.Logger == null)
+            if (Ready)
             {
-                this.Logger = new Logger(Constants.LogPath, Constants.StatePath);
-            }
-            processWatcher.StartWatching();
-            this.processWatcher.ProcessStarted += ProcessStartedEventHandler;
-            this.processWatcher.ProcessExited += ProcessExitedEventHandler;
-            this.Logger.StatesUpdated += LoggerUpdatedStates;
-            try
-            {
-                foreach (Job Job in Jobs)
+                Ready = false;
+                if (this.Logger == null)
                 {
-                    if (!Tasks.Any(x => x.Item1.Job.Name == Job.Name))
+                    this.Logger = new Logger(Constants.LogPath, Constants.StatePath);
+                }
+                processWatcher.StartWatching();
+                this.processWatcher.ProcessStarted += ProcessStartedEventHandler;
+                this.processWatcher.ProcessExited += ProcessExitedEventHandler;
+                this.Logger.StatesUpdated += LoggerUpdatedStates;
+                try
+                {
+                    List<Saver> Savers = new List<Saver>();
+                    foreach (Job Job in Jobs)
                     {
-                        Saver saver = new Saver(Job, ref Logger, ref LockPriorityEvent);
-                        saver.PrioritizedCopyStarted += JobStartedPriority;
-                        saver.PrioritizedCopyEnded += JobEndedPriority;
-                        if(ForbiddenProcessRunning)
+                        Savers.Add(new Saver(Job, ref Logger, ref ManualResetEvent));
+                    }
+                    foreach(Saver Saver in Savers)
+                    {
+                        Task task = Task.Run(() =>
                         {
-                            saver.Workstate = Workstate.PAUSED_FORBIDDENSOFTWARE;
-                            saver.ManualResetEvent.Reset();
-                        }
-                        Tasks.Add((saver, Task.Run(() => {
-                            saver.SaveFiles();
-                            DeleteFinishedJobTask(saver);
-                            }
-                        )));
-                    }
-                    else
-                    {
-                        ResumeJob(Job);
+                            Saver.SaveFiles();
+                        });
+                        await Task.WhenAll(task);
+                        task.Dispose();
                     }
                 }
-                if (!JobsExecuting)
+                catch
                 {
-                    JobsExecuting = true;
-                    await Task.WhenAll(Tasks.Select(x => x.Item2));
-                    //Console.WriteLine("all jobs finished");
-                    Logger.FinalizeLogs();
-                    Logger = null;
-                    processWatcher.StopWatching();
-                    JobsExecuting = false;
                 }
-            }
-            catch
-            {
-            }
-        }
-        private void DeleteFinishedJobTask(Saver saver)
-        {
-            Tasks.RemoveAll(x => x.Item1 == saver);
-        }
-        private void JobStartedPriority(object sender, EventArgs e)
-        {
-            if ((sender is Saver saver)  && (saver.CurrentPriority==FilePriority.HIGH))
-            {
-                //Console.WriteLine($"The job {saver.Job.Name} is copying prioritized files.");
-                foreach ((Saver, Task) NotPrioritizedTask in Tasks.Where(x => x.Item1 != sender))
+                finally
                 {
-                    NotPrioritizedTask.Item1.Workstate = Workstate.PAUSED_UNPRIORITIZED;
-                    NotPrioritizedTask.Item1.ManualResetEvent.Reset();
-                    Logger.PauseState(NotPrioritizedTask.Item1.Job.Name, Workstate.PAUSED_UNPRIORITIZED);
-                    //Console.WriteLine($"Job : {NotPrioritizedTask.Item1.Job.Name} is paused.");
+                    Ready = true;
                 }
-            }
-        }
-        private void JobEndedPriority(object sender, EventArgs e)
-        {
-            if ((sender is Saver saver) && (saver.CurrentPriority == FilePriority.HIGH))
-            {
-                //Console.WriteLine($"The job {saver.Job.Name} finished copying prioritized files.");
-                foreach ((Saver, Task) NotPrioritizedTask in Tasks.Where(x => x.Item1 != sender))
-                {
-                    if (NotPrioritizedTask.Item1.Workstate != Workstate.PAUSED_USER)
-                    {
-                        NotPrioritizedTask.Item1.Workstate = Workstate.ACTIVE;
-                        NotPrioritizedTask.Item1.ManualResetEvent.Set();
-                        Logger.ResumeState(NotPrioritizedTask.Item1.Job.Name);
-                    }
-                    //Console.WriteLine($"Job : {NotPrioritizedTask.Item1.Job.Name} is resumed.");
-                }
-            }
-        }
-        public void StopJob(Job Job)
-        {
-            try
-            {
-                Saver saver = Tasks.Where(x => x.Item1.Job.Name == Job.Name).First().Item1;
-                if (saver != null)
-                {
-                    saver.Stopped = true;
-                }
-            }
-            catch
-            {
-            }
-        }
-        public void PauseJob(Job Job)
-        {
-            try
-            {
-                Saver saver = Tasks.Where(x => x.Item1.Job.Name == Job.Name).First().Item1;
-                if (saver != null)
-                {
-                    saver.Workstate = Workstate.PAUSED_USER;
-                    saver.ManualResetEvent.Reset();
-                    Logger.PauseState(saver.Job.Name, Workstate.PAUSED_USER);
-                }
-            }
-            catch
-            {
-            }
-        }
-        public void ResumeJob(Job Job)
-        {
-            try
-            {
-                Saver saver = Tasks.Where(x => x.Item1.Job.Name == Job.Name).First().Item1;
-                if (saver != null && !this.ForbiddenProcessRunning && saver.Workstate == Workstate.PAUSED_USER)
-                {
-                    saver.Workstate = Workstate.ACTIVE;
-                    saver.ManualResetEvent.Set();
-                    Logger.ResumeState(saver.Job.Name);
-                }
-            }
-            catch
-            {
             }
         }
         private void ProcessStartedEventHandler(object sender, EventArgs e)
         {
-            this.ForbiddenProcessRunning = true;
-            foreach ((Saver, Task) NotPrioritizedTasks in Tasks.Where(x => x.Item1.Workstate != Workstate.PAUSED_UNPRIORITIZED && x.Item1.Workstate != Workstate.PAUSED_USER))
-            {
-                NotPrioritizedTasks.Item1.Workstate = Workstate.PAUSED_FORBIDDENSOFTWARE;
-                NotPrioritizedTasks.Item1.ManualResetEvent.Reset();
-                Logger.PauseState(NotPrioritizedTasks.Item1.Job.Name, Workstate.PAUSED_FORBIDDENSOFTWARE);
-            }
+            ManualResetEvent.Reset();
         }
         private void ProcessExitedEventHandler(object sender, EventArgs e)
         {
-            this.ForbiddenProcessRunning = false;
-            foreach ((Saver, Task) NotPrioritizedTasks in Tasks.Where(x => x.Item1.Workstate != Workstate.PAUSED_UNPRIORITIZED && x.Item1.Workstate != Workstate.PAUSED_USER))
-            {
-                NotPrioritizedTasks.Item1.Workstate = Workstate.ACTIVE;
-                NotPrioritizedTasks.Item1.ManualResetEvent.Set();
-                Logger.ResumeState(NotPrioritizedTasks.Item1.Job.Name);
-            }
+            ManualResetEvent.Set();
         }
         private void LoggerUpdatedStates(object sender, EventArgs e) 
         {
