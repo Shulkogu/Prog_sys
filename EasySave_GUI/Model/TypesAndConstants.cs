@@ -29,8 +29,8 @@ namespace Model
         public static readonly string ExeLocation = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string JobsFile = ExeLocation + @"\\jobs.json";
         public static readonly string SettingsFile = ExeLocation + @"\\settings.json";
-        public static readonly string LogPath = ExeLocation + @"\\logs\\files\\";
-        public static readonly string StatePath = ExeLocation + @"\\logs\\state\\";
+        public static readonly string LogPath = ExeLocation + @"logs\files\";
+        public static readonly string StatePath = ExeLocation + @"logs\state\";
         public static readonly string CryptoSoft = ExeLocation + @"\\CryptoSoft.exe";
         public static readonly string SingleToDoubleBackslashRegex = @"(?<!\\)\\{1}(?!\\)|\\{3,}";
         public static readonly string GetExtensionRegex = @"\..+$";

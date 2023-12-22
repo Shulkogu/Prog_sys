@@ -32,5 +32,7 @@
     <system:String x:Key="ExtensionAlreadyPresent">L'extension est déjà présente dans la liste.</system:String>
     <system:String x:Key="InvalidExtensionFormat">Format d'extension invalide. L'extension devrait commencer par un point (.)</system:String>
     <system:String x:Key="InstanceAlreadyExecuting">Bonsoir non. Une instance du programme est déjà en exécution. On ne peut exécuter plusieurs instances on même temps.</system:String>
+    <system:String x:Key="Logs">Logs journaliers</system:String>
+    <system:String x:Key="States">États</system:String>
 
 </ResourceDictionary>
