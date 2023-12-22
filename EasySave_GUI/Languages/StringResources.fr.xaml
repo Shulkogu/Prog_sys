@@ -22,8 +22,18 @@
     <system:String x:Key="StrCryptExt">Extensions à chiffrer :</system:String>
     <system:String x:Key="StrPrioExt">Extensions prioritaires :</system:String>
     <system:String x:Key="StrExtAdd">Ajouter une Extension</system:String>
-    <system:String x:Key="StrMaxSizeMo">Taille maximale en Ko :</system:String>
+    <system:String x:Key="StrMaxSizeKo">Taille maximale en Ko :</system:String>
     <system:String x:Key="StrEncryptKey">Clé de chiffrement :</system:String>
     <system:String x:Key="StrSoftwareBusiness">Logiciel Métier :</system:String>
-    
+    <system:String x:Key="NameAlreadyExists">Veuillez renseigner un autre nom. Ce nom existe déjà.</system:String>
+    <system:String x:Key="EmptyFields">Veuillez renseigner toutes les données.</system:String>
+    <system:String x:Key="WrongNumberFormat">Veuillez entrer un nombre.</system:String>
+    <system:String x:Key="KeyTooSmall">La clé doit faire au moins 4 caractères</system:String>
+    <system:String x:Key="ExtensionAlreadyPresent">L'extension est déjà présente dans la liste.</system:String>
+    <system:String x:Key="InvalidExtensionFormat">Format d'extension invalide. L'extension devrait commencer par un point (.)</system:String>
+    <system:String x:Key="InstanceAlreadyExecuting">Bonsoir non. Une instance du programme est déjà en exécution. On ne peut exécuter plusieurs instances on même temps.</system:String>
+    <system:String x:Key="Logs">Logs journaliers</system:String>
+    <system:String x:Key="States">États</system:String>
+    <system:String x:Key="StartOrResume">Démarrer/Reprendre</system:String>
+
 </ResourceDictionary>
