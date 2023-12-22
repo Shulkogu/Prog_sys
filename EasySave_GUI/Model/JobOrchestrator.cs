@@ -132,10 +132,13 @@ namespace Model
                 //Console.WriteLine($"The job {saver.Job.Name} is copying prioritized files.");
                 foreach ((Saver, Task) NotPrioritizedTask in Tasks.Where(x => x.Item1 != sender))
                 {
-                    NotPrioritizedTask.Item1.Workstate = Workstate.PAUSED_UNPRIORITIZED;
-                    NotPrioritizedTask.Item1.ManualResetEvent.Reset();
-                    Logger.PauseState(NotPrioritizedTask.Item1.Job.Name, Workstate.PAUSED_UNPRIORITIZED);
-                    //Console.WriteLine($"Job : {NotPrioritizedTask.Item1.Job.Name} is paused.");
+                    if (NotPrioritizedTask.Item1.Workstate != Workstate.PAUSED_USER)
+                    {
+                        NotPrioritizedTask.Item1.Workstate = Workstate.PAUSED_UNPRIORITIZED;
+                        NotPrioritizedTask.Item1.ManualResetEvent.Reset();
+                        Logger.PauseState(NotPrioritizedTask.Item1.Job.Name, Workstate.PAUSED_UNPRIORITIZED);
+                        //Console.WriteLine($"Job : {NotPrioritizedTask.Item1.Job.Name} is paused.");
+                    }
                 }
             }
         }
