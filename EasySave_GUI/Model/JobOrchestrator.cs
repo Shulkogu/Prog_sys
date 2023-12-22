@@ -156,11 +156,11 @@ namespace Model
                 }
             }
         }
-        public void StopJob(Job Job)
+        public void StopJob(string Name)
         {
             try
             {
-                Saver saver = Tasks.Where(x => x.Item1.Job.Name == Job.Name).First().Item1;
+                Saver saver = Tasks.Where(x => x.Item1.Job.Name == Name).First().Item1;
                 if (saver != null)
                 {
                     saver.Stopped = true;
@@ -170,11 +170,11 @@ namespace Model
             {
             }
         }
-        public void PauseJob(Job Job)
+        public void PauseJob(string Name)
         {
             try
             {
-                Saver saver = Tasks.Where(x => x.Item1.Job.Name == Job.Name).First().Item1;
+                Saver saver = Tasks.Where(x => x.Item1.Job.Name == Name).First().Item1;
                 if (saver != null)
                 {
                     saver.Workstate = Workstate.PAUSED_USER;

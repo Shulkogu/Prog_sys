@@ -19,6 +19,7 @@ namespace EasySave_GUI.JobControl
         private JobSaver JobSaver = new JobSaver();
         public ICommand StartJobs { get; set; }
         public ICommand PauseJobs { get; set; }
+        public ICommand StopJobs { get; set; }
         public ObservableCollection<Model.Savestate> Savestates
         {
             get
@@ -46,6 +47,8 @@ namespace EasySave_GUI.JobControl
             JobOrchestrator.StatesUpdated += StatesUpdatedEvent;
             JobSaver.JobsUpdated += StatesUpdatedEvent;
             StartJobs = new RelayCommand(StartSelectedJobs);
+            PauseJobs = new RelayCommand(PauseSelectedJobs);
+            StopJobs = new RelayCommand(StopSelectedJobs);
         }
         private void StatesUpdatedEvent(object sender, EventArgs e)
         {
@@ -58,6 +61,20 @@ namespace EasySave_GUI.JobControl
         private void StartSelectedJobs()
         {
             JobOrchestrator.ExecuteJobs(JobSaver.LoadExistingJobs().Where(x => SelectedJobs.Any(y => y.Name == x.Name)).ToList());
+        }
+        private void PauseSelectedJobs()
+        {
+            foreach (Savestate savestate in SelectedJobs)
+            {
+                JobOrchestrator.PauseJob(savestate.Name);
+            }
+        }
+        private void StopSelectedJobs()
+        {
+            foreach (Savestate savestate in SelectedJobs)
+            {
+                JobOrchestrator.StopJob(savestate.Name);
+            }
         }
     }
 }
