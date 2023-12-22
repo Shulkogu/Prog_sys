@@ -76,5 +76,19 @@ namespace EasySave_GUI.JobControl
                 JobOrchestrator.StopJob(savestate.Name);
             }
         }
+        public List<int> GetSelectedIndexes()
+        {
+            int Counter = 0;
+            List<int> Indexes = new List<int>();
+            foreach(Savestate savestate in Savestates)
+            {
+                if(SelectedJobs.Any(x => x.Name==savestate.Name))
+                {
+                    Indexes.Add(Counter);
+                }
+                Counter++;
+            }
+            return Indexes;
+        }
     }
 }
