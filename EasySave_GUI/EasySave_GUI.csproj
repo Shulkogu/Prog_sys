@@ -14,13 +14,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="ViewController\**" />
-      <EmbeddedResource Remove="ViewController\**" />
-      <None Remove="ViewController\**" />
-      <Page Remove="ViewController\**" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Page Update="HomeView\HomeWindow.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
@@ -56,6 +49,10 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>Ressources.resx</DependentUpon>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="ViewController\" />
     </ItemGroup>
 
     <ItemGroup>
