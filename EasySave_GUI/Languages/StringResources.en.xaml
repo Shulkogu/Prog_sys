@@ -34,5 +34,6 @@
     <system:String x:Key="InstanceAlreadyExecuting">An instance of the program is already running. Multiple instances can't be running at the same time.</system:String>
     <system:String x:Key="Logs">Daily logs</system:String>
     <system:String x:Key="States">States</system:String>
+    <system:String x:Key="StartOrResume">Start/Resume</system:String>
 
 </ResourceDictionary>

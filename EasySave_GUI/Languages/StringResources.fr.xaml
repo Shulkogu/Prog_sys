@@ -34,5 +34,6 @@
     <system:String x:Key="InstanceAlreadyExecuting">Bonsoir non. Une instance du programme est déjà en exécution. On ne peut exécuter plusieurs instances on même temps.</system:String>
     <system:String x:Key="Logs">Logs journaliers</system:String>
     <system:String x:Key="States">États</system:String>
+    <system:String x:Key="StartOrResume">Démarrer/Reprendre</system:String>
 
 </ResourceDictionary>

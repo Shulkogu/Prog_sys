@@ -1,5 +1,4 @@
-﻿using EasySave_GUI.JobList;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace EasySave_GUI.JobControl;
 
