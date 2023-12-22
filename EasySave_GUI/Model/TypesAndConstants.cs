@@ -29,8 +29,8 @@ namespace Model
         public static readonly string ExeLocation = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string JobsFile = ExeLocation + @"\\jobs.json";
         public static readonly string SettingsFile = ExeLocation + @"\\settings.json";
-        public static readonly string LogPath = ExeLocation + @"logs\files\";
-        public static readonly string StatePath = ExeLocation + @"logs\state\";
+        public static readonly string LogPath = ExeLocation + @"\\logs\\files\\";
+        public static readonly string StatePath = ExeLocation + @"\\logs\\state\\";
         public static readonly string CryptoSoft = ExeLocation + @"\\CryptoSoft.exe";
         public static readonly string SingleToDoubleBackslashRegex = @"(?<!\\)\\{1}(?!\\)|\\{3,}";
         public static readonly string GetExtensionRegex = @"\..+$";
@@ -92,17 +92,13 @@ namespace Model
         private static Lazy<Settings> _cache = new(() => new());
         public static Settings Instance => _cache.Value;
         [JsonInclude]
-        public MutableEnum<Model.Language> Language = new MutableEnum <Model.Language>(Model.Language.English);
+        public MutableEnum<Language> Language = new MutableEnum <Language>(Model.Language.English);
         [JsonInclude]
         public MutableEnum<LogFileType> LogFileType = new MutableEnum <LogFileType>(Model.LogFileType.JSON);
         [JsonInclude]
         public List<string> EncryptedExtensions = new List<string>();
         [JsonInclude]
         public string ForbiddenSoftware = "";
-        [JsonInclude]
-        public long MaxSimultaneousFileSize = 40000; //Default value:40000
-        [JsonInclude]
-        public List<string> PrioritizedExtensions = new List<string>();
         [JsonInclude]
         public string EncryptionKey = "DEFAULT"; //Default key:DEFAULT
         public bool LoadSettings()
@@ -116,7 +112,7 @@ namespace Model
                 try
                 {
                     Settings Loaded = JsonSerializer.Deserialize<Settings>(System.IO.File.ReadAllText(Constants.SettingsFile))!;
-                    this.Language=Loaded.Language;this.LogFileType=Loaded.LogFileType; this.EncryptedExtensions=Loaded.EncryptedExtensions;this.ForbiddenSoftware=Loaded.ForbiddenSoftware;this.MaxSimultaneousFileSize = Loaded.MaxSimultaneousFileSize;this.PrioritizedExtensions = Loaded.PrioritizedExtensions;this.EncryptionKey=Loaded.EncryptionKey;
+                    this.Language=Loaded.Language;this.LogFileType=Loaded.LogFileType; this.EncryptedExtensions=Loaded.EncryptedExtensions;this.ForbiddenSoftware=Loaded.ForbiddenSoftware;this.EncryptionKey=Loaded.EncryptionKey;
                     return true;
                 }
                 catch
@@ -203,10 +199,8 @@ namespace Model
     {
         ACTIVE,
         END,
-        PAUSED_UNPRIORITIZED,
         PAUSED_FORBIDDENSOFTWARE,
-        PAUSED_USER,
-        STOPPED
+        WAITING_TO_START,
     }
     public enum LogFileType
     {

@@ -65,16 +65,8 @@ namespace Model
         //The new file's size will be returned. -1 Will be returned if an error occured
         {
             long Size = new FileInfo(this.Job.SourcePath + @"\\" + RelativeFilePath).Length;
-            bool OverMaxSimultaneousSize = Size >= Constants.Settings.MaxSimultaneousFileSize;
             try
             {
-                if (OverMaxSimultaneousSize)
-                {
-                    //Console.WriteLine($"wanting to copy big file: {this.Job.SourcePath + @"\\" + RelativeFilePath}");
-                    Constants.SmallFilesAuthorized.WaitOne(); //First, it waits for potential other big files to finish copying
-                    //Console.WriteLine($"file: {this.Job.SourcePath + @"\\" + RelativeFilePath} finished waiting, will block other big files from copying");
-                    Constants.BlockBigFiles();//Then, it blocks other potential big files from copying
-                }
                 string TargetFilePath = this.Job.TargetPath + @"\\" + this.SaveSubfolder + @"\\" + RelativeFilePath;
                 long Time = 0;
                 if (Encrypted)
@@ -113,14 +105,6 @@ namespace Model
             catch
             {
                 return (-1,0);
-            }
-            finally
-            { //This block gets executed no matter what (whether the an exception was caught, wether something was returned)
-                if(OverMaxSimultaneousSize)
-                {
-                    //Console.WriteLine($"file: {this.Job.SourcePath + @"\\" + RelativeFilePath} finished copying, the copy of other big files will be authorized");
-                    Constants.AuthorizeBigFiles(); //If it blocked other big files from copying, now that the copy is finished, it unblocks them
-                }
             }
         }
         private string? CheckForExistingNewest()
